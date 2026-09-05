@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebas
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getDatabase, ref, get, set, update, push, child, onValue, remove } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
-const firebaseConfig = { apiKey: "AIzaSyDtzonzkDsEvF9KNXi70j6ZTXG5kLAM_0c", authDomain: "cmms-37512.firebaseapp.com", databaseURL: "https://cmms-37512-default-rtdb.firebaseio.com", projectId: "cmms-37512", storageBucket: "cmms-37512.firebasestorage.app", messagingSenderId: "451592788539", appId: "1:451592788539:web:d3dc3e68b1543996b39a1e" };
+const firebaseConfig = { apiKey: "AIzaSyDtzonzkDsEvF9KNXi70j6ZTXG5kLAM_0c", authDomain: "cmms-37512.firebaseapp.com", databaseURL: "https://cmms-37512-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "cmms-37512", storageBucket: "cmms-37512.firebasestorage.app", messagingSenderId: "451592788539", appId: "1:451592788539:web:d3dc3e68b1543996b39a1e" };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
@@ -267,164 +267,158 @@ const logAudit = (action, details) => {
 // --- Pages ---
 
 // Dashboard (Basic version for now)
+// --- ENTERPRISE DASHBOARD ---
+
 const renderDashboard = () => {
     const assets = Object.values(dbData.assets || {});
     const wos = Object.values(dbData.workOrders || {});
+    const parts = Object.values(dbData.spareParts || {});
+    const brks = Object.values(dbData.breakdowns || {});
     
+    const totalAssets = assets.length;
+    const running = assets.filter(a => a.status === 'active').length;
+    const stopped = assets.filter(a => a.status === 'stopped').length;
+    const openWos = wos.filter(w => w.status !== 'Completed').length;
+    const activeBrks = brks.filter(b => b.status !== 'Closed').length;
+    const criticalBrks = brks.filter(b => b.priority === 'critical' && b.status !== 'Closed').length;
+    const lowStock = parts.filter(p => p.qty <= p.min).length;
+    
+    // Calculate Availability
+    const availability = totalAssets ? ((running / totalAssets) * 100).toFixed(1) : 0;
+
     elContent.innerHTML = `
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-surface p-6 rounded-xl border border-border shadow-sm flex items-center justify-between">
-                <div><div class="text-secondary text-sm font-bold mb-1">إجمالي المكائن</div><div class="text-3xl font-extrabold text-primary">${assets.length}</div></div>
+        <!-- ROW 1: 8 KPI CARDS -->
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 mb-6">
+            <div class="bg-surface p-4 rounded-xl border border-border flex flex-col justify-between">
+                <div class="text-[11px] text-secondary font-bold mb-2">إجمالي المكائن</div>
+                <div class="text-2xl font-extrabold text-primary">\${totalAssets}</div>
             </div>
-            <div class="bg-surface p-6 rounded-xl border border-border shadow-sm flex items-center justify-between">
-                <div><div class="text-secondary text-sm font-bold mb-1">عاملة / متوقفة</div><div class="text-3xl font-extrabold text-success">${assets.filter(a=>a.status==='active').length} <span class="text-lg text-gray-300">/</span> <span class="text-danger">${assets.filter(a=>a.status==='stopped').length}</span></div></div>
+            <div class="bg-surface p-4 rounded-xl border border-border border-l-4 border-l-success flex flex-col justify-between">
+                <div class="text-[11px] text-secondary font-bold mb-2">تعمل</div>
+                <div class="text-2xl font-extrabold text-success">\${running}</div>
             </div>
-            <div class="bg-surface p-6 rounded-xl border border-border shadow-sm flex items-center justify-between">
-                <div><div class="text-secondary text-sm font-bold mb-1">أوامر مفتوحة</div><div class="text-3xl font-extrabold text-warning">${wos.filter(w=>w.status!=='مكتمل').length}</div></div>
+            <div class="bg-surface p-4 rounded-xl border border-border border-l-4 border-l-danger flex flex-col justify-between">
+                <div class="text-[11px] text-secondary font-bold mb-2">متوقفة</div>
+                <div class="text-2xl font-extrabold text-danger">\${stopped}</div>
             </div>
-            <div class="bg-surface p-6 rounded-xl border border-border shadow-sm flex items-center justify-between">
-                <div><div class="text-secondary text-sm font-bold mb-1">بلاغات الأعطال</div><div class="text-3xl font-extrabold text-danger">${Object.values(dbData.breakdowns || {}).length}</div></div>
+            <div class="bg-surface p-4 rounded-xl border border-border flex flex-col justify-between">
+                <div class="text-[11px] text-secondary font-bold mb-2">أعطال نشطة</div>
+                <div class="text-2xl font-extrabold text-primary">\${activeBrks}</div>
+            </div>
+            <div class="bg-surface p-4 rounded-xl border border-border border-l-4 border-l-red-800 flex flex-col justify-between">
+                <div class="text-[11px] text-secondary font-bold mb-2">أعطال حرجة</div>
+                <div class="text-2xl font-extrabold text-red-800">\${criticalBrks}</div>
+            </div>
+            <div class="bg-surface p-4 rounded-xl border border-border flex flex-col justify-between">
+                <div class="text-[11px] text-secondary font-bold mb-2">أوامر مفتوحة</div>
+                <div class="text-2xl font-extrabold text-action">\${openWos}</div>
+            </div>
+            <div class="bg-surface p-4 rounded-xl border border-border border-l-4 border-l-warning flex flex-col justify-between">
+                <div class="text-[11px] text-secondary font-bold mb-2">Low Stock</div>
+                <div class="text-2xl font-extrabold text-warning">\${lowStock}</div>
+            </div>
+            <div class="bg-surface p-4 rounded-xl border border-border flex flex-col justify-between">
+                <div class="text-[11px] text-secondary font-bold mb-2">Availability</div>
+                <div class="text-2xl font-extrabold text-primary">\${availability}%</div>
+            </div>
+        </div>
+
+        <!-- ROW 2: Prod Lines (8) + Critical Alerts (4) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
+            <div class="lg:col-span-8 bg-surface rounded-xl border border-border flex flex-col">
+                <div class="p-4 border-b border-border font-bold text-sm">خطوط الإنتاج (Production Lines)</div>
+                <div class="p-4 flex-1 overflow-x-auto">
+                    <table class="w-full text-sm text-right">
+                        <thead>
+                            <tr class="text-secondary border-b border-border">
+                                <th class="pb-2 font-bold">الخط</th>
+                                <th class="pb-2 font-bold">المكائن</th>
+                                <th class="pb-2 font-bold">تعمل</th>
+                                <th class="pb-2 font-bold">متوقفة</th>
+                                <th class="pb-2 font-bold">الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-border last:border-0 hover:bg-gray-50">
+                                <td class="py-3 font-bold text-primary">خط التعبئة PL-01</td>
+                                <td class="py-3">8</td><td class="py-3 text-success font-bold">7</td><td class="py-3 text-danger font-bold">1</td>
+                                <td class="py-3"><span class="bg-green-100 text-success px-2 py-1 rounded text-xs font-bold">مستقر</span></td>
+                            </tr>
+                            <tr class="border-b border-border last:border-0 hover:bg-gray-50">
+                                <td class="py-3 font-bold text-primary">خط التغليف PL-02</td>
+                                <td class="py-3">5</td><td class="py-3 text-success font-bold">4</td><td class="py-3 text-danger font-bold">1</td>
+                                <td class="py-3"><span class="bg-yellow-100 text-warning px-2 py-1 rounded text-xs font-bold">تحذير</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-4 bg-surface rounded-xl border border-border flex flex-col">
+                <div class="p-4 border-b border-border font-bold text-sm text-danger flex justify-between">
+                    <span>تنبيهات حرجة (Critical Alerts)</span>
+                    <span class="bg-red-100 text-danger text-xs px-2 rounded-full flex items-center">\${criticalBrks}</span>
+                </div>
+                <div class="p-4 flex-1 space-y-3">
+                    \${brks.filter(b => b.priority === 'critical').map(b => \`
+                        <div class="border-l-4 border-danger bg-red-50 p-3 rounded text-sm">
+                            <div class="font-bold text-red-900">\${b.title}</div>
+                            <div class="text-xs text-red-700 mt-1">\${dbData.assets[b.assetId]?.name || b.assetId} - \${new Date(b.time).toLocaleTimeString('ar-IQ')}</div>
+                        </div>
+                    \`).join('') || '<div class="text-secondary text-sm text-center py-4">لا توجد تنبيهات حرجة</div>'}
+                </div>
+            </div>
+        </div>
+
+        <!-- ROW 3: Active WOs (7) + Inventory Alerts (5) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
+            <div class="lg:col-span-7 bg-surface rounded-xl border border-border flex flex-col">
+                <div class="p-4 border-b border-border font-bold text-sm">أوامر العمل المفتوحة</div>
+                <div class="p-4 flex-1 overflow-x-auto">
+                    \${wos.length ? \`
+                    <table class="w-full text-sm text-right">
+                        <thead>
+                            <tr class="text-secondary border-b border-border">
+                                <th class="pb-2 font-bold">رقم الأمر</th>
+                                <th class="pb-2 font-bold">الوصف</th>
+                                <th class="pb-2 font-bold">الفني</th>
+                                <th class="pb-2 font-bold">الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            \${wos.filter(w => w.status !== 'Completed').slice(0,5).map(w => \`
+                            <tr class="border-b border-border last:border-0 hover:bg-gray-50">
+                                <td class="py-3 text-xs font-bold" dir="ltr">\${w.id || 'WO-XXX'}</td>
+                                <td class="py-3 truncate max-w-[150px]">\${w.description}</td>
+                                <td class="py-3">\${w.tech || '-'}</td>
+                                <td class="py-3"><span class="bg-blue-50 text-action px-2 py-1 rounded text-xs font-bold">\${w.status}</span></td>
+                            </tr>
+                            \`).join('')}
+                        </tbody>
+                    </table>\` : '<div class="text-secondary text-sm text-center py-4">لا توجد أوامر مفتوحة</div>'}
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 bg-surface rounded-xl border border-border flex flex-col">
+                <div class="p-4 border-b border-border font-bold text-sm text-warning">نواقص المخزون (Low Stock)</div>
+                <div class="p-4 flex-1">
+                    \${parts.filter(p => p.qty <= p.min).slice(0,5).map(p => \`
+                        <div class="flex justify-between items-center border-b border-border last:border-0 py-2">
+                            <div>
+                                <div class="font-bold text-sm">\${p.name}</div>
+                                <div class="text-xs text-secondary" dir="ltr">\${p.code}</div>
+                            </div>
+                            <div class="text-danger font-bold text-sm">\${p.qty} / \${p.min}</div>
+                        </div>
+                    \`).join('') || '<div class="text-secondary text-sm text-center py-4">المخزون مستقر</div>'}
+                </div>
             </div>
         </div>
     `;
 };
 
-// ... Assets, Work Orders, Breakdowns, Inventory remain similar for now, just adding checks ...
-// --- ASSETS (PHASE 2 IMPLEMENTATION) ---
 
-let currentAssetsPage = 1;
-const itemsPerPage = 10;
-
-window.openAssetProfile = (assetId) => {
-    const a = dbData.assets[assetId];
-    if (!a) return;
-    
-    openModal("ملف الماكينة: " + a.name, `
-        <div class="flex flex-col h-full">
-            <div class="flex border-b border-border mb-4">
-                <button class="px-4 py-2 font-bold text-action border-b-2 border-action">نظرة عامة</button>
-                <button class="px-4 py-2 font-bold text-secondary hover:text-primary">أوامر العمل</button>
-                <button class="px-4 py-2 font-bold text-secondary hover:text-primary">سجل الأعطال</button>
-            </div>
-            
-            <div class="flex-1 overflow-y-auto">
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="p-4 bg-gray-50 rounded-xl border border-border">
-                        <div class="text-xs text-secondary font-bold mb-1">الرقم التعريفي (ID)</div>
-                        <div class="font-bold text-primary" dir="ltr">${a.code || assetId}</div>
-                    </div>
-                    <div class="p-4 bg-gray-50 rounded-xl border border-border">
-                        <div class="text-xs text-secondary font-bold mb-1">القسم / خط الإنتاج</div>
-                        <div class="font-bold text-primary">${a.department || '-'}</div>
-                    </div>
-                    <div class="p-4 bg-gray-50 rounded-xl border border-border">
-                        <div class="text-xs text-secondary font-bold mb-1">الحالة الحالية</div>
-                        <div class="font-bold text-primary">${a.status === 'active' ? '<span class="text-success">● تعمل</span>' : '<span class="text-danger">● متوقفة</span>'}</div>
-                    </div>
-                    <div class="p-4 bg-gray-50 rounded-xl border border-border">
-                        <div class="text-xs text-secondary font-bold mb-1">تاريخ الإضافة</div>
-                        <div class="font-bold text-primary" dir="ltr">${a.createdAt ? new Date(a.createdAt).toLocaleDateString('en-GB') : '-'}</div>
-                    </div>
-                </div>
-                
-                <div class="border border-border p-5 rounded-xl shadow-sm text-center flex flex-col items-center justify-center">
-                    <h4 class="font-bold mb-4">رمز QR للماكينة</h4>
-                    <div id="qrcode-${assetId}" class="mb-4 bg-white p-2 border border-border rounded inline-block mx-auto"></div>
-                    <button onclick="window.print()" class="text-sm bg-gray-100 px-4 py-2 rounded-lg font-bold hover:bg-gray-200">طباعة الرمز</button>
-                </div>
-            </div>
-        </div>
-    `, async () => {
-        return true; 
-    });
-
-    setTimeout(() => {
-        if(window.QRCode && document.getElementById('qrcode-' + assetId)) {
-            document.getElementById('qrcode-' + assetId).innerHTML = '';
-            new QRCode(document.getElementById('qrcode-' + assetId), {
-                text: assetId,
-                width: 128,
-                height: 128
-            });
-        }
-    }, 200);
-};
-
-window.openAddAsset = () => {
-    if (!hasPerm('assets.create')) return showToast('لا تملك الصلاحية', 'error');
-    openModal("إضافة ماكينة جديدة", `
-        <div class="space-y-4">
-            <div><label class="block text-sm font-bold mb-2">الاسم <span class="text-danger">*</span></label><input id="a-name" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
-            <div><label class="block text-sm font-bold mb-2">رقم الماكينة (ID)</label><input id="a-code" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none" dir="ltr"></div>
-            <div class="grid grid-cols-2 gap-4">
-                <div><label class="block text-sm font-bold mb-2">القسم</label><input id="a-dep" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
-                <div><label class="block text-sm font-bold mb-2">خط الإنتاج</label><input id="a-line" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div><label class="block text-sm font-bold mb-2">الحالة</label>
-                    <select id="a-status" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option value="active">عاملة</option><option value="stopped">متوقفة</option></select>
-                </div>
-                <div><label class="block text-sm font-bold mb-2">الأهمية (Criticality)</label>
-                    <select id="a-crit" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option value="normal">عادية (C)</option><option value="important">مهمة (B)</option><option value="critical">حرجة (A)</option></select>
-                </div>
-            </div>
-        </div>
-    `, async () => {
-        const name = document.getElementById('a-name').value;
-        if (!name) throw new Error('الاسم مطلوب');
-        const assetId = "AST-" + Date.now().toString().slice(-6);
-        await set(ref(db, 'assets/' + assetId), { 
-            name, 
-            code: document.getElementById('a-code').value || assetId, 
-            department: document.getElementById('a-dep').value,
-            line: document.getElementById('a-line').value,
-            status: document.getElementById('a-status').value,
-            criticality: document.getElementById('a-crit').value,
-            createdAt: Date.now()
-        });
-        logAudit('إضافة ماكينة', `الماكينة: ${name}`);
-        showToast('تمت الإضافة بنجاح'); return true;
-    });
-};
-
-window.deleteAsset = async (id) => {
-    if (!hasPerm('assets.delete')) return showToast('لا تملك الصلاحية', 'error');
-    if (confirm('هل أنت متأكد من حذف هذه الماكينة؟')) {
-        await remove(ref(db, 'assets/' + id));
-        showToast('تم حذف الماكينة');
-        logAudit('حذف ماكينة', `ID: ${id}`);
-    }
-};
-
-const renderAssets = () => {
-    let assetsList = Object.entries(dbData.assets || {});
-    
-    const rows = assetsList.map(([id, a]) => {
-        let critBadge = '';
-        if (a.criticality === 'critical') critBadge = '<span class="text-danger font-bold text-xs bg-red-50 px-2 py-1 rounded">حرجة A</span>';
-        else if (a.criticality === 'important') critBadge = '<span class="text-warning font-bold text-xs bg-yellow-50 px-2 py-1 rounded">مهمة B</span>';
-        else critBadge = '<span class="text-secondary font-bold text-xs bg-gray-100 px-2 py-1 rounded">عادية C</span>';
-
-        let actions = `<button onclick="openAssetProfile('${id}')" class="text-xs text-action hover:text-blue-700 font-bold px-2 py-1 bg-blue-50 rounded mr-2">عرض الملف</button>`;
-        if (hasPerm('assets.delete')) {
-            actions += `<button onclick="deleteAsset('${id}')" class="text-xs text-danger hover:text-red-700 font-bold px-2 py-1 bg-red-50 rounded">حذف</button>`;
-        }
-
-        return `
-        <tr class="hover:bg-gray-50 transition border-b border-border">
-            <td class="p-4 font-bold text-primary">${a.name}</td>
-            <td class="p-4 text-xs font-bold text-secondary" dir="ltr">${a.code||id}</td>
-            <td class="p-4 text-sm">${a.department||'-'}</td>
-            <td class="p-4">${a.status==='active'?'<span class="inline-flex items-center gap-1 text-success text-xs font-bold"><span class="w-2 h-2 rounded-full bg-success"></span> تعمل</span>':'<span class="inline-flex items-center gap-1 text-danger text-xs font-bold"><span class="w-2 h-2 rounded-full bg-danger"></span> متوقفة</span>'}</td>
-            <td class="p-4">${critBadge}</td>
-            <td class="p-4">${actions}</td>
-        </tr>
-    `});
-
-    elContent.innerHTML = createTable(['الماكينة', 'ID', 'القسم', 'الحالة', 'الأهمية', 'الإجراءات'], rows, hasPerm('assets.create') ? 'openAddAsset()' : null, 'إضافة ماكينة');
-};
-
-const renderWorkOrders = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">جاري تطوير الأوامر (المرحلة 3)</div>`; };
+    const renderWorkOrders = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">جاري تطوير الأوامر (المرحلة 3)</div>`; };
 const renderBreakdowns = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">جاري تطوير الأعطال (المرحلة 3)</div>`; };
 const renderInventory = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">جاري تطوير المخازن (المرحلة 4)</div>`; };
 const renderEmployees = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">جاري تخصيص الموظفين (المرحلة 1 ب)</div>`; };
@@ -559,3 +553,4 @@ window.seedDemoData = async () => {
         showToast('حدث خطأ أثناء رفع البيانات: ' + e.message, 'error');
     }
 };
+
