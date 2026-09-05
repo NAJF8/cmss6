@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ø¨ÙˆØ§Ø¨Ø© Ø§Ù„Ù…ÙˆØ¸Ù - CMMS</title>
+    <title>بوابة الموظف - CMMS</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -32,7 +32,8 @@
         #toast-container > div { animation: slideIn 0.3s ease-out forwards; }
         @keyframes slideIn { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>`n</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+</head>
 <body class="bg-background text-primary h-screen flex flex-col overflow-hidden">
     
     <div id="toast-container" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-2 w-11/12 max-w-md"></div>
@@ -40,17 +41,17 @@
     <!-- Login -->
     <div id="login-view" class="h-full flex items-center justify-center p-4">
         <div class="bg-surface p-8 rounded-2xl shadow-xl w-full max-w-sm border border-border">
-            <h2 class="text-2xl font-bold text-center mb-6">Ø¨ÙˆØ§Ø¨Ø© Ø§Ù„Ù…ÙˆØ¸ÙÙŠÙ†</h2>
+            <h2 class="text-2xl font-bold text-center mb-6">بوابة الموظفين</h2>
             <div id="login-error" class="hide bg-red-100 text-danger p-3 rounded-lg mb-4 text-sm text-center font-bold"></div>
             <form id="login-form" class="space-y-4">
-                <input type="email" id="email" required placeholder="Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ" class="w-full px-4 py-3 border border-border rounded-xl outline-none focus:border-action" dir="ltr">
-                <input type="password" id="password" required placeholder="ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±" class="w-full px-4 py-3 border border-border rounded-xl outline-none focus:border-action" dir="ltr">
-                <button type="submit" id="btn-login" class="w-full bg-action text-white font-bold py-3 rounded-xl hover:bg-blue-700 shadow-md">Ø¯Ø®ÙˆÙ„</button>
+                <input type="email" id="email" required placeholder="البريد الإلكتروني" class="w-full px-4 py-3 border border-border rounded-xl outline-none focus:border-action" dir="ltr">
+                <input type="password" id="password" required placeholder="كلمة المرور" class="w-full px-4 py-3 border border-border rounded-xl outline-none focus:border-action" dir="ltr">
+                <button type="submit" id="btn-login" class="w-full bg-action text-white font-bold py-3 rounded-xl hover:bg-blue-700 shadow-md">دخول</button>
             </form>
-            <div class="mt-6 text-center text-sm text-secondary">Ø£Ùˆ</div>
+            <div class="mt-6 text-center text-sm text-secondary">أو</div>
             <button id="btn-google" class="mt-4 w-full border border-border font-bold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50">
                 <svg class="w-5 h-5" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-                Ø§Ù„Ø¯Ø®ÙˆÙ„ Ø¹Ø¨Ø± Google
+                الدخول عبر Google
             </button>
         </div>
     </div>
@@ -61,8 +62,8 @@
             <div class="flex items-center gap-3">
                 <div id="user-initial" class="w-10 h-10 rounded-full bg-action flex items-center justify-center font-bold text-lg border-2 border-white/20">--</div>
                 <div>
-                    <h1 id="user-name" class="font-bold text-sm">Ù…Ø±Ø­Ø¨Ø§Ù‹</h1>
-                    <p id="user-role" class="text-xs text-gray-400">ÙÙ†ÙŠ</p>
+                    <h1 id="user-name" class="font-bold text-sm">مرحباً</h1>
+                    <p id="user-role" class="text-xs text-gray-400">فني</p>
                 </div>
             </div>
             <button id="btn-logout" class="p-2 text-gray-400 hover:text-white bg-white/10 rounded-full">
@@ -72,28 +73,29 @@
 
         <main class="flex-1 overflow-y-auto p-4 pb-20 relative" id="content"></main>
 
-        <nav class="bg-surface border-t border-border flex justify-around p-3 shrink-0 fixed bottom-0 w-full z-20 pb-safe">
-            <button class="nav-btn flex flex-col items-center gap-1 w-16 text-action font-bold" data-tab="home">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                <span class="text-[10px]">الرئيسية</span>
-            </button>
-            <button class="nav-btn flex flex-col items-center gap-1 w-16 text-secondary relative" data-tab="scan">
-                <div class="absolute -top-6 bg-action text-white p-3 rounded-full shadow-lg border-4 border-background">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                </div>
-                <span class="text-[10px] mt-6">مسح QR</span>
-            </button>
-            <button class="nav-btn flex flex-col items-center gap-1 w-16 text-secondary" data-tab="tasks">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                <span class="text-[10px]">مهامي</span>
-            </button>
-        </nav>
+        
+<nav class="bg-surface border-t border-border flex justify-around p-3 shrink-0 fixed bottom-0 w-full z-20 pb-safe">
+    <button class="nav-btn flex flex-col items-center gap-1 w-16 text-action font-bold" data-tab="home">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span class="text-[10px]">الرئيسية</span>
+    </button>
+    <button class="nav-btn flex flex-col items-center gap-1 w-16 text-secondary relative" data-tab="scan">
+        <div class="absolute -top-6 bg-action text-white p-3 rounded-full shadow-lg border-4 border-background">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        </div>
+        <span class="text-[10px] mt-6">مسح QR</span>
+    </button>
+    <button class="nav-btn flex flex-col items-center gap-1 w-16 text-secondary" data-tab="tasks">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+        <span class="text-[10px]">مهامي</span>
+    </button>
+</nav>
+
     </div>
     
     
-
 <script type="module">
-﻿import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getDatabase, ref, get, set, update, push, child, onValue, remove } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
@@ -129,7 +131,7 @@ let dbData = { assets: {} }; // Needed to show asset names
 document.getElementById('login-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); }
-    catch (err) { document.getElementById('login-error').classList.remove('hide'); document.getElementById('login-error').textContent = 'Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø¯Ø®ÙˆÙ„ Ø®Ø§Ø·Ø¦Ø©'; }
+    catch (err) { document.getElementById('login-error').classList.remove('hide'); document.getElementById('login-error').textContent = 'بيانات الدخول خاطئة'; }
 });
 document.getElementById('btn-google').addEventListener('click', () => signInWithPopup(auth, googleProvider));
 document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
@@ -151,7 +153,7 @@ onAuthStateChanged(auth, async (user) => {
                 for (let k in data) {
                     if (data[k].email === user.email) {
                         document.getElementById('user-name').textContent = data[k].name || user.email;
-                        document.getElementById('user-role').textContent = data[k].role === 'admin' ? 'Ø¥Ø¯Ø§Ø±ÙŠ' : 'ÙÙ†ÙŠ ØµÙŠØ§Ù†Ø©';
+                        document.getElementById('user-role').textContent = data[k].role === 'admin' ? 'إداري' : 'فني صيانة';
                         document.getElementById('user-initial').textContent = (data[k].name ? data[k].name[0] : user.email[0]).toUpperCase();
                         found = true;
                         break;
@@ -187,57 +189,57 @@ onAuthStateChanged(auth, async (user) => {
 window.updateStatus = async (id, status) => {
     try {
         await update(ref(db, 'workOrders/' + id), { status });
-        showToast('ØªÙ… ØªØ­Ø¯ÙŠØ« Ø§Ù„Ù…Ù‡Ù…Ø©');
-    } catch(e) { showToast('Ø®Ø·Ø£', 'error'); }
+        showToast('تم تحديث المهمة');
+    } catch(e) { showToast('خطأ', 'error'); }
 };
 
 const renderTab = () => {
     if (currentTab === 'home') {
         elContent.innerHTML = `
             <div class="mb-6">
-                <h2 class="text-xl font-bold mb-4">Ù…Ù„Ø®Øµ Ø£Ø¹Ù…Ø§Ù„ÙŠ</h2>
+                <h2 class="text-xl font-bold mb-4">ملخص أعمالي</h2>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="bg-surface p-5 rounded-2xl shadow-sm border border-border text-center">
-                        <div class="text-secondary text-xs font-bold mb-2">Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°</div>
-                        <div class="text-4xl font-extrabold text-action">${myTasks.filter(t=>t.status==='Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°').length}</div>
+                        <div class="text-secondary text-xs font-bold mb-2">قيد التنفيذ</div>
+                        <div class="text-4xl font-extrabold text-action">${myTasks.filter(t=>t.status==='قيد التنفيذ').length}</div>
                     </div>
                     <div class="bg-surface p-5 rounded-2xl shadow-sm border border-border text-center">
-                        <div class="text-secondary text-xs font-bold mb-2">Ù…Ù‡Ø§Ù… Ø¬Ø¯ÙŠØ¯Ø©</div>
-                        <div class="text-4xl font-extrabold text-warning">${myTasks.filter(t=>t.status==='Ø¬Ø¯ÙŠØ¯').length}</div>
+                        <div class="text-secondary text-xs font-bold mb-2">مهام جديدة</div>
+                        <div class="text-4xl font-extrabold text-warning">${myTasks.filter(t=>t.status==='جديد').length}</div>
                     </div>
                 </div>
             </div>
             <div>
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-lg">Ø£Ø­Ø¯Ø« Ø§Ù„Ù…Ù‡Ø§Ù… Ø§Ù„Ù…Ø·Ù„ÙˆØ¨Ø©</h3>
+                    <h3 class="font-bold text-lg">أحدث المهام المطلوبة</h3>
                 </div>
                 <div class="space-y-4">
-                    ${myTasks.filter(t=>t.status!=='Ù…ÙƒØªÙ…Ù„').slice(0,3).map(t => {
+                    ${myTasks.filter(t=>t.status!=='مكتمل').slice(0,3).map(t => {
                         const ast = t.assetId ? dbData.assets[t.assetId]?.name || '-' : '-';
                         return `
                         <div class="bg-surface p-5 rounded-2xl shadow-sm border border-border flex flex-col gap-3">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <div class="font-bold text-lg text-primary">${t.title}</div>
-                                    <div class="text-xs text-secondary mt-1 font-bold">Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©: ${ast}</div>
+                                    <div class="text-xs text-secondary mt-1 font-bold">الماكينة: ${ast}</div>
                                 </div>
                                 <span class="px-2 py-1 bg-yellow-100 text-warning rounded text-[10px] font-bold">${t.priority}</span>
                             </div>
                             <div class="flex gap-2 mt-2 border-t border-border pt-3">
-                                ${t.status === 'Ø¬Ø¯ÙŠØ¯' ? `<button onclick="updateStatus('${t.id}', 'Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°')" class="flex-1 bg-action text-white py-2 rounded-xl text-sm font-bold shadow hover:bg-blue-700 transition">Ø¨Ø¯Ø¡ Ø§Ù„Ø¹Ù…Ù„</button>` : ''}
-                                ${t.status === 'Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°' ? `<button onclick="updateStatus('${t.id}', 'Ù…ÙƒØªÙ…Ù„')" class="flex-1 bg-success text-white py-2 rounded-xl text-sm font-bold shadow hover:bg-green-700 transition">Ø¥Ù†Ù‡Ø§Ø¡ Ø§Ù„Ø¹Ù…Ù„</button>` : ''}
+                                ${t.status === 'جديد' ? `<button onclick="updateStatus('${t.id}', 'قيد التنفيذ')" class="flex-1 bg-action text-white py-2 rounded-xl text-sm font-bold shadow hover:bg-blue-700 transition">بدء العمل</button>` : ''}
+                                ${t.status === 'قيد التنفيذ' ? `<button onclick="updateStatus('${t.id}', 'مكتمل')" class="flex-1 bg-success text-white py-2 rounded-xl text-sm font-bold shadow hover:bg-green-700 transition">إنهاء العمل</button>` : ''}
                             </div>
                         </div>
-                    `}).join('') || '<div class="text-secondary text-center p-8 font-bold border-2 border-dashed border-border rounded-xl">Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù‡Ø§Ù… Ø­Ø§Ù„ÙŠØ§Ù‹. Ø£Ù†Øª Ø¬Ø§Ù‡Ø²!</div>'}
+                    `}).join('') || '<div class="text-secondary text-center p-8 font-bold border-2 border-dashed border-border rounded-xl">لا توجد مهام حالياً. أنت جاهز!</div>'}
                 </div>
             </div>
         `;
     } else if (currentTab === 'tasks') {
         elContent.innerHTML = `
             <div class="mb-4">
-                <h2 class="text-xl font-bold mb-2">Ø³Ø¬Ù„ Ø§Ù„Ù…Ù‡Ø§Ù…</h2>
+                <h2 class="text-xl font-bold mb-2">سجل المهام</h2>
                 <div class="relative w-full">
-                    <input type="text" placeholder="Ø¨Ø­Ø« ÙÙŠ Ø§Ù„Ù…Ù‡Ø§Ù…..." class="w-full border border-border rounded-xl pl-3 pr-10 py-3 text-sm outline-none focus:border-action transition shadow-sm bg-surface">
+                    <input type="text" placeholder="بحث في المهام..." class="w-full border border-border rounded-xl pl-3 pr-10 py-3 text-sm outline-none focus:border-action transition shadow-sm bg-surface">
                     <svg class="w-5 h-5 text-gray-400 absolute right-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
             </div>
@@ -247,11 +249,11 @@ const renderTab = () => {
                     return `
                     <div class="bg-surface p-4 rounded-2xl shadow-sm border border-border flex flex-col gap-2">
                         <div class="flex justify-between items-start">
-                            <div><div class="font-bold text-primary">${t.title}</div><div class="text-xs text-secondary font-bold">Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©: ${ast}</div></div>
+                            <div><div class="font-bold text-primary">${t.title}</div><div class="text-xs text-secondary font-bold">الماكينة: ${ast}</div></div>
                             <span class="px-2 py-1 bg-gray-100 border border-border text-primary rounded text-xs font-bold">${t.status}</span>
                         </div>
                     </div>
-                `}).join('') || '<div class="text-secondary text-center p-8 font-bold">Ù„Ø§ ØªÙˆØ¬Ø¯ Ù…Ù‡Ø§Ù… Ø³Ø§Ø¨Ù‚Ø©</div>'}
+                `}).join('') || '<div class="text-secondary text-center p-8 font-bold">لا توجد مهام سابقة</div>'}
             </div>
         `;
     }
@@ -271,9 +273,9 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 });
 
 
+
 // --- PHASE 2: EMPLOYEE QR SCANNER & BOTTOM NAV ---
 
-// Assuming currentTab is already managed
 const origRenderTab = renderTab;
 
 window.renderTab = () => {
@@ -281,7 +283,7 @@ window.renderTab = () => {
         elContent.innerHTML = `
             <div class="flex flex-col h-full bg-black text-white rounded-2xl overflow-hidden shadow-xl relative">
                 <div class="p-4 bg-gray-900 flex justify-between items-center z-10 absolute top-0 w-full">
-                    <h2 class="font-bold">Ù…Ø³Ø­ ÙƒÙˆØ¯ Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø© (QR)</h2>
+                    <h2 class="font-bold">مسح كود الماكينة (QR)</h2>
                     <button onclick="document.querySelector('[data-tab=\\'home\\']').click()" class="text-white bg-gray-800 p-2 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 </div>
                 <div id="qr-reader" class="flex-1 w-full bg-black flex items-center justify-center"></div>
@@ -294,20 +296,19 @@ window.renderTab = () => {
                 html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } },
                 (decodedText, decodedResult) => {
                     html5QrCode.stop().then(() => {
-                        // Found a QR code! Check if it's an asset.
                         const assetId = decodedText.trim();
                         if (dbData.assets && dbData.assets[assetId]) {
-                            showToast('ØªÙ… Ø§Ù„ØªØ¹Ø±Ù Ø¹Ù„Ù‰ Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©');
+                            showToast('تم التعرف على الماكينة');
                             showAssetActionSheet(assetId);
                         } else {
-                            showToast('Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø© ØºÙŠØ± Ù…Ø³Ø¬Ù„Ø© ÙÙŠ Ø§Ù„Ù†Ø¸Ø§Ù…: ' + assetId, 'error');
+                            showToast('الماكينة غير مسجلة: ' + assetId, 'error');
                             document.querySelector('[data-tab="home"]').click();
                         }
                     });
                 },
-                (errorMessage) => { /* ignore normal errors */ })
+                (errorMessage) => { })
                 .catch((err) => {
-                    document.getElementById('qr-reader').innerHTML = '<div class="text-center p-8 text-red-500 font-bold">Ù„Ø§ ÙŠÙ…ÙƒÙ† Ø§Ù„ÙˆØµÙˆÙ„ Ù„Ù„ÙƒØ§Ù…ÙŠØ±Ø§</div>';
+                    document.getElementById('qr-reader').innerHTML = '<div class="text-center p-8 text-red-500 font-bold">لا يمكن الوصول للكاميرا</div>';
                 });
             }
         }, 300);
@@ -320,7 +321,6 @@ window.showAssetActionSheet = (assetId) => {
     const a = dbData.assets[assetId];
     if (!a) return;
     
-    // Create bottom sheet for asset actions
     const sheet = document.createElement('div');
     sheet.className = "fixed inset-0 bg-black/60 z-[100] flex flex-col justify-end transition-opacity duration-300";
     sheet.innerHTML = `
@@ -331,30 +331,27 @@ window.showAssetActionSheet = (assetId) => {
                     <h3 class="font-bold text-xl text-primary">${a.name}</h3>
                     <p class="text-xs text-secondary font-bold mt-1" dir="ltr">${a.code || assetId}</p>
                 </div>
-                ${a.status === 'active' ? '<span class="bg-green-100 text-success px-3 py-1 rounded-full text-xs font-bold border border-green-200">ØªØ¹Ù…Ù„</span>' : '<span class="bg-red-100 text-danger px-3 py-1 rounded-full text-xs font-bold border border-red-200">Ù…ØªÙˆÙ‚ÙØ©</span>'}
+                ${a.status === 'active' ? '<span class="bg-green-100 text-success px-3 py-1 rounded-full text-xs font-bold border border-green-200">تعمل</span>' : '<span class="bg-red-100 text-danger px-3 py-1 rounded-full text-xs font-bold border border-red-200">متوقفة</span>'}
             </div>
             
             <div class="grid grid-cols-2 gap-3 mb-6">
-                <button onclick="document.getElementById('temp-sheet').remove(); showToast('Ø¬Ø§Ø±ÙŠ Ø§Ù„ØªØ·ÙˆÙŠØ± (Ø§Ù„Ù…Ø±Ø­Ù„Ø© 3)')" class="bg-red-50 text-danger border border-red-100 p-4 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-red-100 transition">
+                <button onclick="document.getElementById('temp-sheet').remove(); showToast('جاري التطوير (المرحلة 3)')" class="bg-red-50 text-danger border border-red-100 p-4 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-red-100 transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    <span class="font-bold text-sm">Ø¥Ø¨Ù„Ø§Øº Ø¹Ù† Ø¹Ø·Ù„</span>
+                    <span class="font-bold text-sm">إبلاغ عن عطل</span>
                 </button>
-                <button onclick="document.getElementById('temp-sheet').remove(); showToast('Ø¬Ø§Ø±ÙŠ Ø§Ù„ØªØ·ÙˆÙŠØ± (Ø§Ù„Ù…Ø±Ø­Ù„Ø© 3)')" class="bg-blue-50 text-action border border-blue-100 p-4 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-blue-100 transition">
+                <button onclick="document.getElementById('temp-sheet').remove(); showToast('جاري التطوير (المرحلة 3)')" class="bg-blue-50 text-action border border-blue-100 p-4 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-blue-100 transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    <span class="font-bold text-sm">Ø³Ø¬Ù„ Ø§Ù„Ø£Ø¹Ù…Ø§Ù„</span>
+                    <span class="font-bold text-sm">سجل الأعمال</span>
                 </button>
             </div>
             
-            <button onclick="document.getElementById('temp-sheet').remove(); document.querySelector('[data-tab=\\'home\\']').click()" class="w-full bg-gray-100 text-secondary font-bold py-3.5 rounded-xl hover:bg-gray-200 transition">Ø¥Ù„ØºØ§Ø¡</button>
+            <button onclick="document.getElementById('temp-sheet').remove(); document.querySelector('[data-tab=\\'home\\']').click()" class="w-full bg-gray-100 text-secondary font-bold py-3.5 rounded-xl hover:bg-gray-200 transition">إلغاء</button>
         </div>
     `;
     sheet.id = "temp-sheet";
     document.body.appendChild(sheet);
 };
 
-
 </script>
 </body>
 </html>
-
-
