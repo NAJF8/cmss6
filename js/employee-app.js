@@ -81,7 +81,7 @@ onAuthStateChanged(auth, async (user) => {
             }
             // Sort: newest first
             myTasks.sort((a,b) => (b.date||0) - (a.date||0));
-            renderTab();
+            if(window.renderTab) window.renderTab(); else renderTab();
         });
     } else {
         elLogin.classList.remove('hide');
@@ -171,7 +171,7 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('text-secondary'); 
         btn.classList.add('text-action', 'font-bold');
         currentTab = btn.dataset.tab;
-        renderTab();
+        if(window.renderTab) window.renderTab(); else renderTab();
     });
 });
 
