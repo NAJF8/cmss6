@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الموظف - CMMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="js/tailwindcss.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#F5F6F7',
+                        surface: '#FFFFFF',
+                        primary: '#17202A',
+                        secondary: '#667085',
+                        border: '#E4E7EC',
+                        action: '#2563EB',
+                        success: '#16A34A',
+                        warning: '#D97706',
+                        danger: '#DC2626'
+                    },
+                    fontFamily: { sans: ['Cairo', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .hide { display: none !important; }
+        #toast-container > div { animation: slideIn 0.3s ease-out forwards; }
+        @keyframes slideIn { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-background text-primary h-screen flex flex-col overflow-hidden">
+    
+    <div id="toast-container" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-2 w-11/12 max-w-md"></div>
+
+    <!-- Login -->
+    <div id="login-view" class="h-full flex items-center justify-center p-4">
+        <div class="bg-surface p-8 rounded-2xl shadow-xl w-full max-w-sm border border-border">
+            <h2 class="text-2xl font-bold text-center mb-6">بوابة الموظفين</h2>
+            <div id="login-error" class="hide bg-red-100 text-danger p-3 rounded-lg mb-4 text-sm text-center font-bold"></div>
+            <form id="login-form" class="space-y-4">
+                <input type="email" id="email" required placeholder="البريد الإلكتروني" class="w-full px-4 py-3 border border-border rounded-xl outline-none focus:border-action" dir="ltr">
+                <input type="password" id="password" required placeholder="كلمة المرور" class="w-full px-4 py-3 border border-border rounded-xl outline-none focus:border-action" dir="ltr">
+                <button type="submit" id="btn-login" class="w-full bg-action text-white font-bold py-3 rounded-xl hover:bg-blue-700 shadow-md">دخول</button>
+            </form>
+            <div class="mt-6 text-center text-sm text-secondary">أو</div>
+            <button id="btn-google" class="mt-4 w-full border border-border font-bold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50">
+                <svg class="w-5 h-5" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                الدخول عبر Google
+            </button>
+        </div>
+    </div>
+
+    <!-- App -->
+    <div id="app-view" class="hide flex-col h-full bg-background">
+        <header class="bg-primary text-white p-4 flex justify-between items-center shadow-lg shrink-0 rounded-b-2xl mb-2 z-10">
+            <div class="flex items-center gap-3">
+                <div id="user-initial" class="w-10 h-10 rounded-full bg-action flex items-center justify-center font-bold text-lg border-2 border-white/20">--</div>
+                <div>
+                    <h1 id="user-name" class="font-bold text-sm">مرحباً</h1>
+                    <p id="user-role" class="text-xs text-gray-400">فني</p>
+                </div>
+            </div>
+            <button id="btn-logout" class="p-2 text-gray-400 hover:text-white bg-white/10 rounded-full">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            </button>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 pb-20 relative" id="content"></main>
+
+        <nav class="bg-surface border-t border-border flex justify-around p-3 shrink-0 fixed bottom-0 w-full z-20 pb-safe">
+            <button class="nav-btn flex flex-col items-center gap-1 w-16 text-action font-bold" data-tab="home">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                <span class="text-[10px]">الرئيسية</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center gap-1 w-16 text-secondary" data-tab="tasks">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                <span class="text-[10px]">مهامي</span>
+            </button>
+        </nav>
+    </div>
+    
+    <script type="module" src="js/employee-app.js"></script>
+</body>
+</html>

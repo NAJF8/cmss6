@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise CMMS - الإدارة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="js/tailwindcss.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#F5F6F7',
+                        surface: '#FFFFFF',
+                        primary: '#17202A',
+                        secondary: '#667085',
+                        border: '#E4E7EC',
+                        sidebar: '#18212B',
+                        action: '#2563EB',
+                        success: '#16A34A',
+                        warning: '#D97706',
+                        danger: '#DC2626'
+                    },
+                    fontFamily: { sans: ['Cairo', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .hide { display: none !important; }
+        .nav-link.active { background-color: rgba(37,99,235,0.15); border-right: 3px solid #2563EB; color: #fff; font-weight: bold; }
+        .nav-link { transition: all 0.2s; border-right: 3px solid transparent; }
+        .nav-link:hover:not(.active) { background-color: rgba(255,255,255,0.05); }
+        .modal-enter { animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        #toast-container > div { animation: slideIn 0.3s ease-out forwards; }
+        @keyframes slideIn { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-background text-primary h-screen flex flex-col overflow-hidden">
+    
+    <div id="toast-container" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-2 w-full max-w-md px-4"></div>
+
+    <!-- Login -->
+    <div id="login-view" class="absolute inset-0 bg-background flex items-center justify-center z-50">
+        <div class="bg-surface p-8 rounded-xl shadow-lg w-full max-w-md border border-border">
+            <h1 class="text-2xl font-bold text-center mb-6">تسجيل الدخول</h1>
+            <div id="login-error" class="hide bg-red-100 text-danger p-3 rounded mb-4 text-sm text-center font-bold"></div>
+            <form id="login-form" class="space-y-4">
+                <input type="email" id="email" required placeholder="البريد الإلكتروني" class="w-full border border-border rounded-lg p-3 outline-none focus:border-action" dir="ltr">
+                <input type="password" id="password" required placeholder="كلمة المرور" class="w-full border border-border rounded-lg p-3 outline-none focus:border-action" dir="ltr">
+                <button type="submit" id="btn-login" class="w-full bg-action text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">دخول</button>
+            </form>
+            <div class="mt-4 text-center text-sm text-secondary">أو</div>
+            <button id="btn-google" class="mt-4 w-full border border-border font-bold py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50 transition">
+                <svg class="w-5 h-5" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                Google
+            </button>
+        </div>
+    </div>
+
+    <!-- App -->
+    <div id="app-view" class="hide flex h-full w-full">
+        <!-- Sidebar -->
+        <aside class="w-[260px] bg-sidebar text-gray-300 flex flex-col flex-shrink-0 h-full overflow-y-auto">
+            <div class="p-6 border-b border-gray-700/50 flex items-center gap-3">
+                <div class="w-8 h-8 rounded bg-action text-white font-bold flex items-center justify-center text-xl">C</div>
+                <div class="font-bold text-xl text-white">CMMS <span class="font-normal text-sm text-gray-400">Admin</span></div>
+            </div>
+            <nav class="flex-1 py-4 flex flex-col gap-1" id="sidebar"></nav>
+            <div class="p-4 border-t border-gray-700/50 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-gray-600 flex items-center justify-center font-bold text-white text-sm" id="user-initial"></div>
+                <div class="flex-1 overflow-hidden">
+                    <div class="text-sm font-bold text-white truncate" id="user-name"></div>
+                    <div class="text-xs text-gray-400 truncate" id="user-role"></div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Area -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden bg-background">
+            <header class="h-16 bg-surface border-b border-border flex justify-between items-center px-6 shrink-0 shadow-sm">
+                <div class="flex items-center gap-4">
+                    <h2 id="page-title" class="font-bold text-lg text-primary">الرئيسية</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button id="btn-logout" class="text-sm font-bold text-secondary hover:text-danger flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        خروج
+                    </button>
+                </div>
+            </header>
+            
+            <div id="content" class="flex-1 overflow-y-auto p-6"></div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal-container" class="hide fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-surface rounded-xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh] modal-enter border border-border">
+            <div class="flex justify-between items-center p-5 border-b border-border">
+                <h3 id="modal-title" class="font-bold text-xl text-primary"></h3>
+                <button onclick="document.getElementById('modal-container').classList.add('hide')" class="text-secondary hover:text-danger p-1">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="modal-body" class="p-6 overflow-y-auto flex-1 text-sm text-primary"></div>
+            <div class="p-5 border-t border-border flex justify-end gap-3 bg-gray-50/50 rounded-b-xl">
+                <button onclick="document.getElementById('modal-container').classList.add('hide')" class="px-5 py-2.5 bg-white border border-border rounded-lg text-sm font-bold text-secondary hover:bg-gray-50 transition">إلغاء</button>
+                <button id="modal-save" class="px-5 py-2.5 bg-action text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition shadow-sm">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/admin-app.js"></script>
+</body>
+</html>
