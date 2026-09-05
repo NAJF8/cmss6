@@ -692,7 +692,7 @@ const renderBreakdowns = () => {
             <td class="p-3.5 font-bold text-secondary" dir="ltr">${b.id || id}</td>
             <td class="p-3.5 font-bold text-primary">${ast ? ast.name : (b.assetId || '-')}</td>
             <td class="p-3.5 font-bold text-primary">${b.title || b.desc || '-'}</td>
-            <td class="p-3.5">${b.priority === 'حرج' || b.priority === 'critical' ? '<span class="px-2 py-0.5 bg-red-50 text-danger border border-red-200 rounded text-[10px] font-bold">حرج</span>' : '<span class="px-2 py-0.5 bg-yellow-50 text-warning border border-yellow-200 rounded text-[10px] font-bold">${b.priority || 'عادي'}</span>'}</td>
+            <td class="p-3.5">${(b.priority === 'حرج' || b.priority === 'critical') ? '<span class="px-2 py-0.5 bg-red-50 text-danger border border-red-200 rounded text-[10px] font-bold">حرج</span>' : '<span class="px-2 py-0.5 bg-yellow-50 text-warning border border-yellow-200 rounded text-[10px] font-bold">' + (b.priority || 'عادي') + '</span>'}</td>
             <td class="p-3.5"><span class="px-2 py-0.5 bg-blue-50 text-action border border-blue-200 rounded text-[10px] font-bold">${b.status || 'New'}</span></td>
             <td class="p-3.5 text-secondary text-[11px]" dir="ltr">${new Date(b.time || Date.now()).toLocaleTimeString('ar-IQ')}</td>
         </tr>`;
