@@ -1,0 +1,37 @@
+{
+  "rules": {
+    "users": {
+      ".read": "auth != null",
+      ".write": "auth != null && (data.exists() ? root.child('users/' + auth.uid + '/isSuperAdmin').val() === true : true)",
+      "$uid": {
+        "isSuperAdmin": {
+          ".validate": "newData.val() === true ? (root.child('users/' + auth.uid + '/isSuperAdmin').val() === true || auth.token.email === 'mohameadalhaear100@gmail.com') : true"
+        }
+      }
+    },
+    "roles": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('users/' + auth.uid + '/isSuperAdmin').val() === true"
+    },
+    "assets": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "workOrders": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "breakdowns": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "spareParts": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "auditLogs": {
+      ".read": "auth != null && root.child('users/' + auth.uid + '/isSuperAdmin').val() === true",
+      ".write": "auth != null"
+    }
+  }
+}
