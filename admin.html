@@ -494,7 +494,7 @@ window.openAddAsset = () => {
             criticality: document.getElementById('a-crit').value,
             createdAt: Date.now()
         });
-        logAudit('إضافة ماكينة', \`الماكينة: \${name}\`);
+        logAudit('إضافة ماكينة', `الماكينة: ${name}`);
         showToast('تمت الإضافة بنجاح'); return true;
     });
 };
@@ -504,7 +504,7 @@ window.deleteAsset = async (id) => {
     if (confirm('هل أنت متأكد من حذف هذه الماكينة؟')) {
         await remove(ref(db, 'assets/' + id));
         showToast('تم حذف الماكينة');
-        logAudit('حذف ماكينة', \`ID: \${id}\`);
+        logAudit('حذف ماكينة', `ID: ${id}`);
     }
 };
 
@@ -517,21 +517,21 @@ const renderAssets = () => {
         else if (a.criticality === 'important') critBadge = '<span class="text-warning font-bold text-xs bg-yellow-50 px-2 py-1 rounded">مهمة B</span>';
         else critBadge = '<span class="text-secondary font-bold text-xs bg-gray-100 px-2 py-1 rounded">عادية C</span>';
 
-        let actions = \`<button onclick="openAssetProfile('\${id}')" class="text-xs text-action hover:text-blue-700 font-bold px-2 py-1 bg-blue-50 rounded mr-2">عرض الملف</button>\`;
+        let actions = `<button onclick="openAssetProfile('${id}')" class="text-xs text-action hover:text-blue-700 font-bold px-2 py-1 bg-blue-50 rounded mr-2">عرض الملف</button>`;
         if (hasPerm('assets.delete')) {
-            actions += \`<button onclick="deleteAsset('\${id}')" class="text-xs text-danger hover:text-red-700 font-bold px-2 py-1 bg-red-50 rounded">حذف</button>\`;
+            actions += `<button onclick="deleteAsset('${id}')" class="text-xs text-danger hover:text-red-700 font-bold px-2 py-1 bg-red-50 rounded">حذف</button>`;
         }
 
-        return \`
+        return `
         <tr class="hover:bg-gray-50 transition border-b border-border">
-            <td class="p-4 font-bold text-primary">\${a.name}</td>
-            <td class="p-4 text-xs font-bold text-secondary" dir="ltr">\${a.code||id}</td>
-            <td class="p-4 text-sm">\${a.department||'-'}</td>
-            <td class="p-4">\${a.status==='active'?'<span class="inline-flex items-center gap-1 text-success text-xs font-bold"><span class="w-2 h-2 rounded-full bg-success"></span> تعمل</span>':'<span class="inline-flex items-center gap-1 text-danger text-xs font-bold"><span class="w-2 h-2 rounded-full bg-danger"></span> متوقفة</span>'}</td>
-            <td class="p-4">\${critBadge}</td>
-            <td class="p-4">\${actions}</td>
+            <td class="p-4 font-bold text-primary">${a.name}</td>
+            <td class="p-4 text-xs font-bold text-secondary" dir="ltr">${a.code||id}</td>
+            <td class="p-4 text-sm">${a.department||'-'}</td>
+            <td class="p-4">${a.status==='active'?'<span class="inline-flex items-center gap-1 text-success text-xs font-bold"><span class="w-2 h-2 rounded-full bg-success"></span> تعمل</span>':'<span class="inline-flex items-center gap-1 text-danger text-xs font-bold"><span class="w-2 h-2 rounded-full bg-danger"></span> متوقفة</span>'}</td>
+            <td class="p-4">${critBadge}</td>
+            <td class="p-4">${actions}</td>
         </tr>
-    \`});
+    `});
 
     elContent.innerHTML = createTable(['الماكينة', 'ID', 'القسم', 'الحالة', 'الأهمية', 'الإجراءات'], rows, hasPerm('assets.create') ? 'openAddAsset()' : null, 'إضافة ماكينة');
 };
