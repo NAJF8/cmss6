@@ -15,7 +15,7 @@ window.seedDemoData = async () => {
         };
 
         const breakdowns = {
-            'BR-2026-0041': { assetId: 'AST-1005', title: 'ارتفاع حرارة الضاغط', category: 'Mechanical', priority: 'critical', reportedBy: 'علي حسن', time: Date.now() - 3600000, status: 'In Progress' },
+            'BR-2026-0041': { assetId: 'AST-1005', title: 'ارتفاع حرارة الضاغط', category: 'Mechanical', priority: 'critical', reportedBy: 'المدير العام', time: Date.now() - 3600000, status: 'In Progress' },
             'BR-2026-0042': { assetId: 'AST-1003', title: 'توقف حساس التغليف', category: 'Electrical', priority: 'important', reportedBy: 'سجاد حسين', time: Date.now() - 7200000, status: 'Assigned' }
         };
 
