@@ -1,4 +1,4 @@
-﻿import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getDatabase, ref, get, set, update, push, child, onValue, remove } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
@@ -35,8 +35,8 @@ let dbData = { assets: {}, workOrders: {}, breakdowns: {}, users: {}, roles: {},
 const DEFAULT_ROLES = {
     super_admin: { name: 'Super Admin', permissions: ['*'] },
     admin: { name: 'Admin', permissions: ['assets.view', 'assets.edit', 'assets.create', 'work_orders.view', 'work_orders.create', 'work_orders.assign', 'inventory.view', 'users.view'] },
-    technician: { name: 'ÙÙ†ÙŠ ØµÙŠØ§Ù†Ø©', permissions: ['assets.view', 'work_orders.view', 'work_orders.start', 'work_orders.complete', 'inventory.view', 'inventory.issue'] },
-    warehouse: { name: 'Ø£Ù…ÙŠÙ† Ù…Ø®Ø²Ù†', permissions: ['inventory.view', 'inventory.receive', 'inventory.issue'] }
+    technician: { name: 'فني صيانة', permissions: ['assets.view', 'work_orders.view', 'work_orders.start', 'work_orders.complete', 'inventory.view', 'inventory.issue'] },
+    warehouse: { name: 'أمين مخزن', permissions: ['inventory.view', 'inventory.receive', 'inventory.issue'] }
 };
 
 // Check if user has permission
@@ -73,14 +73,14 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     try {
         await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
     } catch (err) {
-        document.getElementById('login-error').textContent = 'Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø¯Ø®ÙˆÙ„ ØºÙŠØ± ØµØ­ÙŠØ­Ø©';
+        document.getElementById('login-error').textContent = 'بيانات الدخول غير صحيحة';
         document.getElementById('login-error').classList.remove('hide');
     }
 });
 
 document.getElementById('btn-google').addEventListener('click', async () => {
     try { await signInWithPopup(auth, googleProvider); }
-    catch (err) { console.error(err); document.getElementById('login-error').textContent = 'ÙØ´Ù„ Ø§Ù„Ø¯Ø®ÙˆÙ„: ' + (err.message.includes('unauthorized-domain') ? 'ÙŠØ¬Ø¨ Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ø¯ÙˆÙ…ÙŠÙ† ÙÙŠ Firebase' : 'ØªØ£ÙƒØ¯ Ù…Ù† Ø¨ÙŠØ§Ù†Ø§ØªÙƒ'); document.getElementById('login-error').classList.remove('hide'); }
+    catch (err) { console.error(err); document.getElementById('login-error').textContent = 'فشل الدخول: ' + (err.message.includes('unauthorized-domain') ? 'يجب إضافة الدومين في Firebase' : 'تأكد من بياناتك'); document.getElementById('login-error').classList.remove('hide'); }
 });
 
 document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
@@ -100,7 +100,7 @@ onAuthStateChanged(auth, async (user) => {
                     if (currentProfile) {
                         // Check status
                         if (currentProfile.status === 'disabled' && currentProfile.email !== 'mohameadalhaear100@gmail.com') {
-                            showToast('ØªÙ… ØªØ¹Ø·ÙŠÙ„ Ø­Ø³Ø§Ø¨Ùƒ', 'error');
+                            showToast('تم تعطيل حسابك', 'error');
                             signOut(auth);
                             return;
                         }
@@ -117,6 +117,14 @@ onAuthStateChanged(auth, async (user) => {
                 }
             }, (err) => {
                 console.error("Firebase read error on " + path, err);
+                if (path === 'users') {
+                    showToast('تنبيه: لم تقم بإضافة قواعد Firebase! (قاعدة البيانات مغلقة)', 'error');
+                    if (!currentProfile && currentUser.email === 'mohameadalhaear100@gmail.com') {
+                        currentProfile = { email: currentUser.email, name: 'المدير العام', roleId: 'super_admin', isSuperAdmin: true, status: 'active' };
+                        document.getElementById('user-name').textContent = 'المدير العام';
+                        renderPage(currentHash);
+                    }
+                }
             });
         });
 
@@ -125,7 +133,7 @@ onAuthStateChanged(auth, async (user) => {
             const superRef = ref(db, 'users/' + user.uid);
             get(superRef).then(snap => {
                 if (!snap.exists()) {
-                    set(superRef, { email: user.email, name: 'Ø§Ù„Ù…Ø¯ÙŠØ± Ø§Ù„Ø¹Ø§Ù…', roleId: 'super_admin', isSuperAdmin: true, status: 'active', createdAt: Date.now() });
+                    set(superRef, { email: user.email, name: 'المدير العام', roleId: 'super_admin', isSuperAdmin: true, status: 'active', createdAt: Date.now() });
                 }
             });
         }
@@ -143,14 +151,14 @@ onAuthStateChanged(auth, async (user) => {
 
 // --- Routing & Navigation ---
 const getAllNavs = () => [
-    { id: 'dashboard', label: 'Ù„ÙˆØ­Ø© Ø§Ù„ØªØ­ÙƒÙ…', section: 'Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©', perm: '*' }, // Everyone can see dashboard
-    { id: 'assets', label: 'Ø§Ù„Ù…ÙƒØ§Ø¦Ù† ÙˆØ§Ù„Ø£ØµÙˆÙ„', section: 'Ø§Ù„ØµÙŠØ§Ù†Ø©', perm: 'assets.view' },
-    { id: 'workorders', label: 'Ø£ÙˆØ§Ù…Ø± Ø§Ù„Ø¹Ù…Ù„', section: 'Ø§Ù„ØµÙŠØ§Ù†Ø©', perm: 'work_orders.view' },
-    { id: 'breakdowns', label: 'Ø§Ù„Ø£Ø¹Ø·Ø§Ù„', section: 'Ø§Ù„ØµÙŠØ§Ù†Ø©', perm: 'work_orders.view' },
-    { id: 'inventory', label: 'Ù‚Ø·Ø¹ Ø§Ù„ØºÙŠØ§Ø±', section: 'Ø§Ù„Ù…Ø®Ø²ÙˆÙ†', perm: 'inventory.view' },
-    { id: 'employees', label: 'Ø§Ù„Ù…ÙˆØ¸ÙÙˆÙ†', section: 'Ø§Ù„Ø¥Ø¯Ø§Ø±Ø©', perm: 'employees.view' },
-    { id: 'users', label: 'Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…ÙˆÙ† ÙˆØ§Ù„ØµÙ„Ø§Ø­ÙŠØ§Øª', section: 'Ø§Ù„Ø¥Ø¯Ø§Ø±Ø©', perm: 'users.view' },
-    { id: 'audit', label: 'Ø³Ø¬Ù„ Ø§Ù„Ù†Ø¸Ø§Ù…', section: 'Ø§Ù„Ù†Ø¸Ø§Ù…', perm: 'audit.view' }
+    { id: 'dashboard', label: 'لوحة التحكم', section: 'الرئيسية', perm: '*' }, // Everyone can see dashboard
+    { id: 'assets', label: 'المكائن والأصول', section: 'الصيانة', perm: 'assets.view' },
+    { id: 'workorders', label: 'أوامر العمل', section: 'الصيانة', perm: 'work_orders.view' },
+    { id: 'breakdowns', label: 'الأعطال', section: 'الصيانة', perm: 'work_orders.view' },
+    { id: 'inventory', label: 'قطع الغيار', section: 'المخزون', perm: 'inventory.view' },
+    { id: 'employees', label: 'الموظفون', section: 'الإدارة', perm: 'employees.view' },
+    { id: 'users', label: 'المستخدمون والصلاحيات', section: 'الإدارة', perm: 'users.view' },
+    { id: 'audit', label: 'سجل النظام', section: 'النظام', perm: 'audit.view' }
 ];
 
 const renderSidebar = () => {
@@ -169,7 +177,7 @@ const renderSidebar = () => {
 };
 
 const renderPage = (hash) => {
-    if (!currentProfile && currentUser.email === 'mohameadalhaear100@gmail.com') { currentProfile = { email: currentUser.email, name: 'Ø§Ù„Ù…Ø¯ÙŠØ± Ø§Ù„Ø¹Ø§Ù…', roleId: 'super_admin', isSuperAdmin: true, status: 'active' }; } else if (!currentProfile) return;
+    if (!currentProfile && currentUser.email === 'mohameadalhaear100@gmail.com') { currentProfile = { email: currentUser.email, name: 'المدير العام', roleId: 'super_admin', isSuperAdmin: true, status: 'active' }; } else if (!currentProfile) return;
     currentHash = hash || '#dashboard';
     
     const visibleNavs = getAllNavs().filter(n => n.perm === '*' || hasPerm(n.perm));
@@ -177,13 +185,13 @@ const renderPage = (hash) => {
     
     // Protection
     if (!pageConfig && currentHash !== '#dashboard') {
-        elContent.innerHTML = `<div class="p-8 text-center text-danger font-bold">Ø¹Ø°Ø±Ø§Ù‹ØŒ Ù„ÙŠØ³ Ù„Ø¯ÙŠÙƒ Ø§Ù„ØµÙ„Ø§Ø­ÙŠØ© Ù„Ù„ÙˆØµÙˆÙ„ Ø¥Ù„Ù‰ Ù‡Ø°Ù‡ Ø§Ù„ØµÙØ­Ø©.</div>`;
+        elContent.innerHTML = `<div class="p-8 text-center text-danger font-bold">عذراً، ليس لديك الصلاحية للوصول إلى هذه الصفحة.</div>`;
         renderSidebar();
         return;
     }
 
     renderSidebar();
-    document.getElementById('page-title').textContent = pageConfig ? pageConfig.label : 'Ù„ÙˆØ­Ø© Ø§Ù„ØªØ­ÙƒÙ…';
+    document.getElementById('page-title').textContent = pageConfig ? pageConfig.label : 'لوحة التحكم';
     
     switch(currentHash) {
         case '#dashboard': renderDashboard(); break;
@@ -207,13 +215,13 @@ window.openModal = (title, bodyHtml, onSave) => {
     document.getElementById('modal-container').classList.remove('hide');
     document.getElementById('modal-save').onclick = async () => {
         const btn = document.getElementById('modal-save');
-        btn.disabled = true; btn.textContent = 'Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø­ÙØ¸...';
+        btn.disabled = true; btn.textContent = 'جاري الحفظ...';
         try {
             if (await onSave()) document.getElementById('modal-container').classList.add('hide');
         } catch(e) {
-            showToast(e.message || 'Ø®Ø·Ø£ ÙÙŠ Ø§Ù„Ø­ÙØ¸', 'error');
+            showToast(e.message || 'خطأ في الحفظ', 'error');
         } finally {
-            btn.disabled = false; btn.textContent = 'Ø­ÙØ¸';
+            btn.disabled = false; btn.textContent = 'حفظ';
         }
     };
 };
@@ -224,7 +232,7 @@ window.closeModal = () => document.getElementById('modal-container').classList.a
 const createTable = (headers, rows, addFn, addLabel) => `
     <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div class="relative w-full sm:w-80">
-            <input type="text" placeholder="Ø¨Ø­Ø«..." class="w-full border border-border rounded-lg pl-3 pr-10 py-2.5 text-sm outline-none focus:border-action transition shadow-sm">
+            <input type="text" placeholder="بحث..." class="w-full border border-border rounded-lg pl-3 pr-10 py-2.5 text-sm outline-none focus:border-action transition shadow-sm">
             <svg class="w-5 h-5 text-gray-400 absolute right-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </div>
         ${addFn ? `<button onclick="${addFn}" class="bg-action text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-blue-700 transition shadow-sm whitespace-nowrap flex gap-2 items-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>${addLabel}</button>` : ''}
@@ -236,12 +244,12 @@ const createTable = (headers, rows, addFn, addLabel) => `
                     <tr>${headers.map(h => `<th class="p-4 font-bold whitespace-nowrap">${h}</th>`).join('')}</tr>
                 </thead>
                 <tbody class="divide-y divide-border">
-                    ${rows.length ? rows.join('') : `<tr><td colspan="${headers.length}" class="p-12 text-center text-secondary font-bold text-base">Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¨ÙŠØ§Ù†Ø§Øª Ù„Ù„Ø¹Ø±Ø¶</td></tr>`}
+                    ${rows.length ? rows.join('') : `<tr><td colspan="${headers.length}" class="p-12 text-center text-secondary font-bold text-base">لا توجد بيانات للعرض</td></tr>`}
                 </tbody>
             </table>
         </div>
         <div class="p-4 border-t border-border bg-gray-50/50 flex justify-between items-center text-xs text-secondary font-bold">
-            <div>Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø³Ø¬Ù„Ø§Øª: ${rows.length}</div>
+            <div>إجمالي السجلات: ${rows.length}</div>
         </div>
     </div>
 `;
@@ -266,16 +274,16 @@ const renderDashboard = () => {
     elContent.innerHTML = `
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div class="bg-surface p-6 rounded-xl border border-border shadow-sm flex items-center justify-between">
-                <div><div class="text-secondary text-sm font-bold mb-1">Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ù…ÙƒØ§Ø¦Ù†</div><div class="text-3xl font-extrabold text-primary">${assets.length}</div></div>
+                <div><div class="text-secondary text-sm font-bold mb-1">إجمالي المكائن</div><div class="text-3xl font-extrabold text-primary">${assets.length}</div></div>
             </div>
             <div class="bg-surface p-6 rounded-xl border border-border shadow-sm flex items-center justify-between">
-                <div><div class="text-secondary text-sm font-bold mb-1">Ø¹Ø§Ù…Ù„Ø© / Ù…ØªÙˆÙ‚ÙØ©</div><div class="text-3xl font-extrabold text-success">${assets.filter(a=>a.status==='active').length} <span class="text-lg text-gray-300">/</span> <span class="text-danger">${assets.filter(a=>a.status==='stopped').length}</span></div></div>
+                <div><div class="text-secondary text-sm font-bold mb-1">عاملة / متوقفة</div><div class="text-3xl font-extrabold text-success">${assets.filter(a=>a.status==='active').length} <span class="text-lg text-gray-300">/</span> <span class="text-danger">${assets.filter(a=>a.status==='stopped').length}</span></div></div>
             </div>
             <div class="bg-surface p-6 rounded-xl border border-border shadow-sm flex items-center justify-between">
-                <div><div class="text-secondary text-sm font-bold mb-1">Ø£ÙˆØ§Ù…Ø± Ù…ÙØªÙˆØ­Ø©</div><div class="text-3xl font-extrabold text-warning">${wos.filter(w=>w.status!=='Ù…ÙƒØªÙ…Ù„').length}</div></div>
+                <div><div class="text-secondary text-sm font-bold mb-1">أوامر مفتوحة</div><div class="text-3xl font-extrabold text-warning">${wos.filter(w=>w.status!=='مكتمل').length}</div></div>
             </div>
             <div class="bg-surface p-6 rounded-xl border border-border shadow-sm flex items-center justify-between">
-                <div><div class="text-secondary text-sm font-bold mb-1">Ø¨Ù„Ø§ØºØ§Øª Ø§Ù„Ø£Ø¹Ø·Ø§Ù„</div><div class="text-3xl font-extrabold text-danger">${Object.values(dbData.breakdowns || {}).length}</div></div>
+                <div><div class="text-secondary text-sm font-bold mb-1">بلاغات الأعطال</div><div class="text-3xl font-extrabold text-danger">${Object.values(dbData.breakdowns || {}).length}</div></div>
             </div>
         </div>
     `;
@@ -291,38 +299,38 @@ window.openAssetProfile = (assetId) => {
     const a = dbData.assets[assetId];
     if (!a) return;
     
-    openModal("Ù…Ù„Ù Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©: " + a.name, `
+    openModal("ملف الماكينة: " + a.name, `
         <div class="flex flex-col h-full">
             <div class="flex border-b border-border mb-4">
-                <button class="px-4 py-2 font-bold text-action border-b-2 border-action">Ù†Ø¸Ø±Ø© Ø¹Ø§Ù…Ø©</button>
-                <button class="px-4 py-2 font-bold text-secondary hover:text-primary">Ø£ÙˆØ§Ù…Ø± Ø§Ù„Ø¹Ù…Ù„</button>
-                <button class="px-4 py-2 font-bold text-secondary hover:text-primary">Ø³Ø¬Ù„ Ø§Ù„Ø£Ø¹Ø·Ø§Ù„</button>
+                <button class="px-4 py-2 font-bold text-action border-b-2 border-action">نظرة عامة</button>
+                <button class="px-4 py-2 font-bold text-secondary hover:text-primary">أوامر العمل</button>
+                <button class="px-4 py-2 font-bold text-secondary hover:text-primary">سجل الأعطال</button>
             </div>
             
             <div class="flex-1 overflow-y-auto">
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <div class="p-4 bg-gray-50 rounded-xl border border-border">
-                        <div class="text-xs text-secondary font-bold mb-1">Ø§Ù„Ø±Ù‚Ù… Ø§Ù„ØªØ¹Ø±ÙŠÙÙŠ (ID)</div>
+                        <div class="text-xs text-secondary font-bold mb-1">الرقم التعريفي (ID)</div>
                         <div class="font-bold text-primary" dir="ltr">${a.code || assetId}</div>
                     </div>
                     <div class="p-4 bg-gray-50 rounded-xl border border-border">
-                        <div class="text-xs text-secondary font-bold mb-1">Ø§Ù„Ù‚Ø³Ù… / Ø®Ø· Ø§Ù„Ø¥Ù†ØªØ§Ø¬</div>
+                        <div class="text-xs text-secondary font-bold mb-1">القسم / خط الإنتاج</div>
                         <div class="font-bold text-primary">${a.department || '-'}</div>
                     </div>
                     <div class="p-4 bg-gray-50 rounded-xl border border-border">
-                        <div class="text-xs text-secondary font-bold mb-1">Ø§Ù„Ø­Ø§Ù„Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©</div>
-                        <div class="font-bold text-primary">${a.status === 'active' ? '<span class="text-success">â— ØªØ¹Ù…Ù„</span>' : '<span class="text-danger">â— Ù…ØªÙˆÙ‚ÙØ©</span>'}</div>
+                        <div class="text-xs text-secondary font-bold mb-1">الحالة الحالية</div>
+                        <div class="font-bold text-primary">${a.status === 'active' ? '<span class="text-success">● تعمل</span>' : '<span class="text-danger">● متوقفة</span>'}</div>
                     </div>
                     <div class="p-4 bg-gray-50 rounded-xl border border-border">
-                        <div class="text-xs text-secondary font-bold mb-1">ØªØ§Ø±ÙŠØ® Ø§Ù„Ø¥Ø¶Ø§ÙØ©</div>
+                        <div class="text-xs text-secondary font-bold mb-1">تاريخ الإضافة</div>
                         <div class="font-bold text-primary" dir="ltr">${a.createdAt ? new Date(a.createdAt).toLocaleDateString('en-GB') : '-'}</div>
                     </div>
                 </div>
                 
                 <div class="border border-border p-5 rounded-xl shadow-sm text-center flex flex-col items-center justify-center">
-                    <h4 class="font-bold mb-4">Ø±Ù…Ø² QR Ù„Ù„Ù…Ø§ÙƒÙŠÙ†Ø©</h4>
+                    <h4 class="font-bold mb-4">رمز QR للماكينة</h4>
                     <div id="qrcode-${assetId}" class="mb-4 bg-white p-2 border border-border rounded inline-block mx-auto"></div>
-                    <button onclick="window.print()" class="text-sm bg-gray-100 px-4 py-2 rounded-lg font-bold hover:bg-gray-200">Ø·Ø¨Ø§Ø¹Ø© Ø§Ù„Ø±Ù…Ø²</button>
+                    <button onclick="window.print()" class="text-sm bg-gray-100 px-4 py-2 rounded-lg font-bold hover:bg-gray-200">طباعة الرمز</button>
                 </div>
             </div>
         </div>
@@ -343,27 +351,27 @@ window.openAssetProfile = (assetId) => {
 };
 
 window.openAddAsset = () => {
-    if (!hasPerm('assets.create')) return showToast('Ù„Ø§ ØªÙ…Ù„Ùƒ Ø§Ù„ØµÙ„Ø§Ø­ÙŠØ©', 'error');
-    openModal("Ø¥Ø¶Ø§ÙØ© Ù…Ø§ÙƒÙŠÙ†Ø© Ø¬Ø¯ÙŠØ¯Ø©", `
+    if (!hasPerm('assets.create')) return showToast('لا تملك الصلاحية', 'error');
+    openModal("إضافة ماكينة جديدة", `
         <div class="space-y-4">
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø§Ø³Ù… <span class="text-danger">*</span></label><input id="a-name" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
-            <div><label class="block text-sm font-bold mb-2">Ø±Ù‚Ù… Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø© (ID)</label><input id="a-code" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none" dir="ltr"></div>
+            <div><label class="block text-sm font-bold mb-2">الاسم <span class="text-danger">*</span></label><input id="a-name" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
+            <div><label class="block text-sm font-bold mb-2">رقم الماكينة (ID)</label><input id="a-code" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none" dir="ltr"></div>
             <div class="grid grid-cols-2 gap-4">
-                <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ù‚Ø³Ù…</label><input id="a-dep" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
-                <div><label class="block text-sm font-bold mb-2">Ø®Ø· Ø§Ù„Ø¥Ù†ØªØ§Ø¬</label><input id="a-line" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
+                <div><label class="block text-sm font-bold mb-2">القسم</label><input id="a-dep" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
+                <div><label class="block text-sm font-bold mb-2">خط الإنتاج</label><input id="a-line" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
             </div>
             <div class="grid grid-cols-2 gap-4">
-                <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø­Ø§Ù„Ø©</label>
-                    <select id="a-status" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option value="active">Ø¹Ø§Ù…Ù„Ø©</option><option value="stopped">Ù…ØªÙˆÙ‚ÙØ©</option></select>
+                <div><label class="block text-sm font-bold mb-2">الحالة</label>
+                    <select id="a-status" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option value="active">عاملة</option><option value="stopped">متوقفة</option></select>
                 </div>
-                <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø£Ù‡Ù…ÙŠØ© (Criticality)</label>
-                    <select id="a-crit" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option value="normal">Ø¹Ø§Ø¯ÙŠØ© (C)</option><option value="important">Ù…Ù‡Ù…Ø© (B)</option><option value="critical">Ø­Ø±Ø¬Ø© (A)</option></select>
+                <div><label class="block text-sm font-bold mb-2">الأهمية (Criticality)</label>
+                    <select id="a-crit" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option value="normal">عادية (C)</option><option value="important">مهمة (B)</option><option value="critical">حرجة (A)</option></select>
                 </div>
             </div>
         </div>
     `, async () => {
         const name = document.getElementById('a-name').value;
-        if (!name) throw new Error('Ø§Ù„Ø§Ø³Ù… Ù…Ø·Ù„ÙˆØ¨');
+        if (!name) throw new Error('الاسم مطلوب');
         const assetId = "AST-" + Date.now().toString().slice(-6);
         await set(ref(db, 'assets/' + assetId), { 
             name, 
@@ -374,17 +382,17 @@ window.openAddAsset = () => {
             criticality: document.getElementById('a-crit').value,
             createdAt: Date.now()
         });
-        logAudit('Ø¥Ø¶Ø§ÙØ© Ù…Ø§ÙƒÙŠÙ†Ø©', \`Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©: ${name}\`);
-        showToast('ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¨Ù†Ø¬Ø§Ø­'); return true;
+        logAudit('إضافة ماكينة', `الماكينة: ${name}`);
+        showToast('تمت الإضافة بنجاح'); return true;
     });
 };
 
 window.deleteAsset = async (id) => {
-    if (!hasPerm('assets.delete')) return showToast('Ù„Ø§ ØªÙ…Ù„Ùƒ Ø§Ù„ØµÙ„Ø§Ø­ÙŠØ©', 'error');
-    if (confirm('Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† Ø­Ø°Ù Ù‡Ø°Ù‡ Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©ØŸ')) {
+    if (!hasPerm('assets.delete')) return showToast('لا تملك الصلاحية', 'error');
+    if (confirm('هل أنت متأكد من حذف هذه الماكينة؟')) {
         await remove(ref(db, 'assets/' + id));
-        showToast('ØªÙ… Ø­Ø°Ù Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©');
-        logAudit('Ø­Ø°Ù Ù…Ø§ÙƒÙŠÙ†Ø©', \`ID: ${id}\`);
+        showToast('تم حذف الماكينة');
+        logAudit('حذف ماكينة', `ID: ${id}`);
     }
 };
 
@@ -393,33 +401,33 @@ const renderAssets = () => {
     
     const rows = assetsList.map(([id, a]) => {
         let critBadge = '';
-        if (a.criticality === 'critical') critBadge = '<span class="text-danger font-bold text-xs bg-red-50 px-2 py-1 rounded">Ø­Ø±Ø¬Ø© A</span>';
-        else if (a.criticality === 'important') critBadge = '<span class="text-warning font-bold text-xs bg-yellow-50 px-2 py-1 rounded">Ù…Ù‡Ù…Ø© B</span>';
-        else critBadge = '<span class="text-secondary font-bold text-xs bg-gray-100 px-2 py-1 rounded">Ø¹Ø§Ø¯ÙŠØ© C</span>';
+        if (a.criticality === 'critical') critBadge = '<span class="text-danger font-bold text-xs bg-red-50 px-2 py-1 rounded">حرجة A</span>';
+        else if (a.criticality === 'important') critBadge = '<span class="text-warning font-bold text-xs bg-yellow-50 px-2 py-1 rounded">مهمة B</span>';
+        else critBadge = '<span class="text-secondary font-bold text-xs bg-gray-100 px-2 py-1 rounded">عادية C</span>';
 
-        let actions = \`<button onclick="openAssetProfile('${id}')" class="text-xs text-action hover:text-blue-700 font-bold px-2 py-1 bg-blue-50 rounded mr-2">Ø¹Ø±Ø¶ Ø§Ù„Ù…Ù„Ù</button>\`;
+        let actions = `<button onclick="openAssetProfile('${id}')" class="text-xs text-action hover:text-blue-700 font-bold px-2 py-1 bg-blue-50 rounded mr-2">عرض الملف</button>`;
         if (hasPerm('assets.delete')) {
-            actions += \`<button onclick="deleteAsset('${id}')" class="text-xs text-danger hover:text-red-700 font-bold px-2 py-1 bg-red-50 rounded">Ø­Ø°Ù</button>\`;
+            actions += `<button onclick="deleteAsset('${id}')" class="text-xs text-danger hover:text-red-700 font-bold px-2 py-1 bg-red-50 rounded">حذف</button>`;
         }
 
-        return \`
+        return `
         <tr class="hover:bg-gray-50 transition border-b border-border">
             <td class="p-4 font-bold text-primary">${a.name}</td>
             <td class="p-4 text-xs font-bold text-secondary" dir="ltr">${a.code||id}</td>
             <td class="p-4 text-sm">${a.department||'-'}</td>
-            <td class="p-4">${a.status==='active'?'<span class="inline-flex items-center gap-1 text-success text-xs font-bold"><span class="w-2 h-2 rounded-full bg-success"></span> ØªØ¹Ù…Ù„</span>':'<span class="inline-flex items-center gap-1 text-danger text-xs font-bold"><span class="w-2 h-2 rounded-full bg-danger"></span> Ù…ØªÙˆÙ‚ÙØ©</span>'}</td>
+            <td class="p-4">${a.status==='active'?'<span class="inline-flex items-center gap-1 text-success text-xs font-bold"><span class="w-2 h-2 rounded-full bg-success"></span> تعمل</span>':'<span class="inline-flex items-center gap-1 text-danger text-xs font-bold"><span class="w-2 h-2 rounded-full bg-danger"></span> متوقفة</span>'}</td>
             <td class="p-4">${critBadge}</td>
             <td class="p-4">${actions}</td>
         </tr>
-    \`});
+    `});
 
-    elContent.innerHTML = createTable(['Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©', 'ID', 'Ø§Ù„Ù‚Ø³Ù…', 'Ø§Ù„Ø­Ø§Ù„Ø©', 'Ø§Ù„Ø£Ù‡Ù…ÙŠØ©', 'Ø§Ù„Ø¥Ø¬Ø±Ø§Ø¡Ø§Øª'], rows, hasPerm('assets.create') ? 'openAddAsset()' : null, 'Ø¥Ø¶Ø§ÙØ© Ù…Ø§ÙƒÙŠÙ†Ø©');
+    elContent.innerHTML = createTable(['الماكينة', 'ID', 'القسم', 'الحالة', 'الأهمية', 'الإجراءات'], rows, hasPerm('assets.create') ? 'openAddAsset()' : null, 'إضافة ماكينة');
 };
 
-const renderWorkOrders = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">Ø¬Ø§Ø±ÙŠ ØªØ·ÙˆÙŠØ± Ø§Ù„Ø£ÙˆØ§Ù…Ø± (Ø§Ù„Ù…Ø±Ø­Ù„Ø© 3)</div>`; };
-const renderBreakdowns = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">Ø¬Ø§Ø±ÙŠ ØªØ·ÙˆÙŠØ± Ø§Ù„Ø£Ø¹Ø·Ø§Ù„ (Ø§Ù„Ù…Ø±Ø­Ù„Ø© 3)</div>`; };
-const renderInventory = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">Ø¬Ø§Ø±ÙŠ ØªØ·ÙˆÙŠØ± Ø§Ù„Ù…Ø®Ø§Ø²Ù† (Ø§Ù„Ù…Ø±Ø­Ù„Ø© 4)</div>`; };
-const renderEmployees = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">Ø¬Ø§Ø±ÙŠ ØªØ®ØµÙŠØµ Ø§Ù„Ù…ÙˆØ¸ÙÙŠÙ† (Ø§Ù„Ù…Ø±Ø­Ù„Ø© 1 Ø¨)</div>`; };
+const renderWorkOrders = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">جاري تطوير الأوامر (المرحلة 3)</div>`; };
+const renderBreakdowns = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">جاري تطوير الأعطال (المرحلة 3)</div>`; };
+const renderInventory = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">جاري تطوير المخازن (المرحلة 4)</div>`; };
+const renderEmployees = () => { elContent.innerHTML = `<div class="p-4 bg-yellow-50 text-warning font-bold rounded">جاري تخصيص الموظفين (المرحلة 1 ب)</div>`; };
 const renderAudit = () => { 
     const rows = Object.values(dbData.auditLogs || {}).sort((a,b)=>b.date-a.date).slice(0, 50).map(a => `
         <tr class="hover:bg-gray-50 transition">
@@ -428,60 +436,60 @@ const renderAudit = () => {
             <td class="p-4 text-xs font-bold text-secondary">${a.user||'-'}</td>
         </tr>
     `);
-    elContent.innerHTML = createTable(['Ø§Ù„ØªØ§Ø±ÙŠØ®', 'Ø§Ù„Ø­Ø¯Ø«', 'Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…'], rows, null, null);
+    elContent.innerHTML = createTable(['التاريخ', 'الحدث', 'المستخدم'], rows, null, null);
 };
 
 // --- USERS & PERMISSIONS (PHASE 1 IMPLEMENTATION) ---
 
 window.openAddUser = () => {
-    if (!hasPerm('users.create')) return showToast('Ù„ÙŠØ³ Ù„Ø¯ÙŠÙƒ ØµÙ„Ø§Ø­ÙŠØ© Ù„Ø¥Ø¶Ø§ÙØ© Ù…Ø³ØªØ®Ø¯Ù…', 'error');
+    if (!hasPerm('users.create')) return showToast('ليس لديك صلاحية لإضافة مستخدم', 'error');
     
     const roleOptions = Object.entries(DEFAULT_ROLES).map(([id, r]) => `<option value="${id}">${r.name}</option>`).join('');
     
-    openModal("Ø¥Ø¶Ø§ÙØ© Ù…Ø³ØªØ®Ø¯Ù… Ø¬Ø¯ÙŠØ¯", `
+    openModal("إضافة مستخدم جديد", `
         <div class="space-y-4">
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ <span class="text-danger">*</span></label><input id="u-email" type="email" class="w-full border border-border p-2.5 rounded-lg" dir="ltr"></div>
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø§Ø³Ù…</label><input id="u-name" type="text" class="w-full border border-border p-2.5 rounded-lg"></div>
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø¯ÙˆØ± (Role)</label><select id="u-role" class="w-full border border-border p-2.5 rounded-lg">${roleOptions}</select></div>
+            <div><label class="block text-sm font-bold mb-2">البريد الإلكتروني <span class="text-danger">*</span></label><input id="u-email" type="email" class="w-full border border-border p-2.5 rounded-lg" dir="ltr"></div>
+            <div><label class="block text-sm font-bold mb-2">الاسم</label><input id="u-name" type="text" class="w-full border border-border p-2.5 rounded-lg"></div>
+            <div><label class="block text-sm font-bold mb-2">الدور (Role)</label><select id="u-role" class="w-full border border-border p-2.5 rounded-lg">${roleOptions}</select></div>
         </div>
     `, async () => {
         const email = document.getElementById('u-email').value;
-        if (!email) throw new Error('Ø§Ù„Ø¨Ø±ÙŠØ¯ Ù…Ø·Ù„ÙˆØ¨');
+        if (!email) throw new Error('البريد مطلوب');
         // Push user logic. (In real CMMS we'd use a Cloud Function. Here we save to RTDB)
         const newUserRef = push(ref(db, 'users'));
         await set(newUserRef, { email, name: document.getElementById('u-name').value, roleId: document.getElementById('u-role').value, status: 'active', createdAt: Date.now() });
-        logAudit('Ø¥Ø¶Ø§ÙØ© Ù…Ø³ØªØ®Ø¯Ù…', `Ø§Ù„Ø¨Ø±ÙŠØ¯: ${email}`);
-        showToast('ØªÙ…Øª Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…');
+        logAudit('إضافة مستخدم', `البريد: ${email}`);
+        showToast('تمت إضافة المستخدم');
         return true;
     });
 };
 
 window.toggleUserStatus = async (uid, currentStatus, isSuperAdmin) => {
-    if (!hasPerm('users.edit')) return showToast('Ù„Ø§ ØªÙ…Ù„Ùƒ Ø§Ù„ØµÙ„Ø§Ø­ÙŠØ©', 'error');
-    if (isSuperAdmin === 'true') return showToast('Ù„Ø§ ÙŠÙ…ÙƒÙ† ØªØ¹Ø¯ÙŠÙ„ Ø­Ø§Ù„Ø© Super Admin', 'error');
+    if (!hasPerm('users.edit')) return showToast('لا تملك الصلاحية', 'error');
+    if (isSuperAdmin === 'true') return showToast('لا يمكن تعديل حالة Super Admin', 'error');
     
     const newStatus = currentStatus === 'active' ? 'disabled' : 'active';
     await update(ref(db, 'users/' + uid), { status: newStatus });
-    logAudit(newStatus === 'active' ? 'ØªÙØ¹ÙŠÙ„ Ù…Ø³ØªØ®Ø¯Ù…' : 'ØªØ¹Ø·ÙŠÙ„ Ù…Ø³ØªØ®Ø¯Ù…', `UID: ${uid}`);
-    showToast('ØªÙ… Ø§Ù„ØªØ­Ø¯ÙŠØ« Ø¨Ù†Ø¬Ø§Ø­');
+    logAudit(newStatus === 'active' ? 'تفعيل مستخدم' : 'تعطيل مستخدم', `UID: ${uid}`);
+    showToast('تم التحديث بنجاح');
 };
 
 const renderUsers = () => {
     const rows = Object.entries(dbData.users || {}).map(([uid, u]) => {
         const roleName = dbData.roles[u.roleId]?.name || DEFAULT_ROLES[u.roleId]?.name || u.roleId;
-        const statusBadge = u.status === 'active' ? '<span class="text-success bg-green-50 px-2 py-1 rounded">Ù†Ø´Ø·</span>' : '<span class="text-danger bg-red-50 px-2 py-1 rounded">Ù…Ø¹Ø·Ù„</span>';
+        const statusBadge = u.status === 'active' ? '<span class="text-success bg-green-50 px-2 py-1 rounded">نشط</span>' : '<span class="text-danger bg-red-50 px-2 py-1 rounded">معطل</span>';
         
         let actions = ``;
         if (hasPerm('users.edit') && !u.isSuperAdmin) {
-            actions += `<button onclick="toggleUserStatus('${uid}', '${u.status}', '${u.isSuperAdmin}')" class="text-xs text-secondary hover:text-primary font-bold px-2 py-1 bg-gray-100 rounded mr-2">ØªØºÙŠÙŠØ± Ø§Ù„Ø­Ø§Ù„Ø©</button>`;
+            actions += `<button onclick="toggleUserStatus('${uid}', '${u.status}', '${u.isSuperAdmin}')" class="text-xs text-secondary hover:text-primary font-bold px-2 py-1 bg-gray-100 rounded mr-2">تغيير الحالة</button>`;
         }
         if (u.isSuperAdmin) {
-            actions = `<span class="text-xs text-gray-400 font-bold">ØµÙ„Ø§Ø­ÙŠØ§Øª Ù…Ø·Ù„Ù‚Ø©</span>`;
+            actions = `<span class="text-xs text-gray-400 font-bold">صلاحيات مطلقة</span>`;
         }
 
         return `
         <tr class="hover:bg-gray-50 transition border-b border-border">
-            <td class="p-4 font-bold text-primary">${u.name||'-'} ${u.isSuperAdmin ? 'â­' : ''}</td>
+            <td class="p-4 font-bold text-primary">${u.name||'-'} ${u.isSuperAdmin ? '⭐' : ''}</td>
             <td class="p-4 text-xs font-bold text-secondary" dir="ltr">${u.email}</td>
             <td class="p-4 text-xs font-bold">${roleName}</td>
             <td class="p-4 text-xs font-bold">${statusBadge}</td>
@@ -489,8 +497,7 @@ const renderUsers = () => {
         </tr>
     `});
     
-    elContent.innerHTML = createTable(['Ø§Ù„Ø§Ø³Ù…', 'Ø§Ù„Ø¨Ø±ÙŠØ¯', 'Ø§Ù„Ø¯ÙˆØ±', 'Ø§Ù„Ø­Ø§Ù„Ø©', 'Ø§Ù„Ø¥Ø¬Ø±Ø§Ø¡Ø§Øª'], rows, hasPerm('users.create') ? 'openAddUser()' : null, 'Ù…Ø³ØªØ®Ø¯Ù… Ø¬Ø¯ÙŠØ¯');
+    elContent.innerHTML = createTable(['الاسم', 'البريد', 'الدور', 'الحالة', 'الإجراءات'], rows, hasPerm('users.create') ? 'openAddUser()' : null, 'مستخدم جديد');
 };
-
 
 
