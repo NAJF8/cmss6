@@ -237,6 +237,14 @@ onAuthStateChanged(auth, async (user) => {
                 }
             }, (err) => {
                 console.error("Firebase read error on " + path, err);
+                if (path === 'users') {
+                    showToast('تنبيه: لم تقم بإضافة قواعد Firebase! (قاعدة البيانات مغلقة)', 'error');
+                    if (!currentProfile && currentUser.email === 'mohameadalhaear100@gmail.com') {
+                        currentProfile = { email: currentUser.email, name: 'المدير العام', roleId: 'super_admin', isSuperAdmin: true, status: 'active' };
+                        document.getElementById('user-name').textContent = 'المدير العام';
+                        renderPage(currentHash);
+                    }
+                }
             });
         });
 
