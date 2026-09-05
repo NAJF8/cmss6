@@ -32,6 +32,10 @@
     "auditLogs": {
       ".read": "auth != null && root.child('users/' + auth.uid + '/isSuperAdmin').val() === true",
       ".write": "auth != null"
+    },
+    "settings": {
+      ".read": "auth != null",
+      ".write": "auth != null"
     }
   }
 }

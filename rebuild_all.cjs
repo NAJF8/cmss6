@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+const fs = require('fs');
+
+// We will write clean, complete admin.html and employee.html
+
+const adminHtmlContent = `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -301,32 +305,32 @@ const renderSidebar = () => {
 
 // Table Helper
 const createTable = (headers, rows, addFn, addLabel) => {
-    return `
+    return \`
     <div class="mb-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div class="relative w-full sm:w-80">
             <input type="text" placeholder="بحث سريع..." onkeyup="filterCurrentTable(this.value)" class="w-full border border-border rounded-xl pl-3 pr-9 py-2 text-xs outline-none focus:border-action transition bg-white shadow-sm">
             <svg class="w-4 h-4 text-gray-400 absolute right-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </div>
-        ${addFn ? `<button onclick="${addFn}" class="bg-action text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+        \${addFn ? \`<button onclick="\${addFn}" class="bg-action text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition shadow-sm flex items-center gap-1.5 whitespace-nowrap">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            ${addLabel}
-        </button>` : ''}
+            \${addLabel}
+        </button>\` : ''}
     </div>
     <div class="bg-surface rounded-2xl border border-border shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-xs text-right" id="data-table">
                 <thead class="bg-gray-50 text-secondary border-b border-border font-bold">
-                    <tr>${headers.map(h => `<th class="p-3.5 whitespace-nowrap">${h}</th>`).join('')}</tr>
+                    <tr>\${headers.map(h => \`<th class="p-3.5 whitespace-nowrap">\${h}</th>\`).join('')}</tr>
                 </thead>
                 <tbody class="divide-y divide-border">
-                    ${rows.length ? rows.join('') : '<tr><td colspan="' + headers.length + '" class="p-10 text-center text-secondary font-bold">لا توجد بيانات للعرض حالياً</td></tr>'}
+                    \${rows.length ? rows.join('') : '<tr><td colspan="' + headers.length + '" class="p-10 text-center text-secondary font-bold">لا توجد بيانات للعرض حالياً</td></tr>'}
                 </tbody>
             </table>
         </div>
         <div class="p-3.5 border-t border-border bg-gray-50/50 flex justify-between items-center text-[11px] text-secondary font-bold">
-            <div>إجمالي السجلات: ${rows.length}</div>
+            <div>إجمالي السجلات: \${rows.length}</div>
         </div>
-    </div>`;
+    </div>\`;
 };
 
 window.filterCurrentTable = (query) => {
@@ -355,40 +359,40 @@ const renderDashboard = () => {
     const lowStock = parts.filter(p => Number(p.qty) <= Number(p.min)).length;
     const availability = totalAssets ? ((running / totalAssets) * 100).toFixed(1) : '94.5';
 
-    elContent.innerHTML = `
+    elContent.innerHTML = \`
         <!-- Row 1: KPI Cards -->
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
             <div class="bg-surface p-4 rounded-xl border border-border">
                 <div class="text-[11px] text-secondary font-bold mb-1">إجمالي المكائن</div>
-                <div class="text-2xl font-extrabold text-primary">${totalAssets}</div>
+                <div class="text-2xl font-extrabold text-primary">\${totalAssets}</div>
             </div>
             <div class="bg-surface p-4 rounded-xl border border-border border-r-4 border-r-success">
                 <div class="text-[11px] text-secondary font-bold mb-1">تعمل</div>
-                <div class="text-2xl font-extrabold text-success">${running}</div>
+                <div class="text-2xl font-extrabold text-success">\${running}</div>
             </div>
             <div class="bg-surface p-4 rounded-xl border border-border border-r-4 border-r-danger">
                 <div class="text-[11px] text-secondary font-bold mb-1">متوقفة</div>
-                <div class="text-2xl font-extrabold text-danger">${stopped}</div>
+                <div class="text-2xl font-extrabold text-danger">\${stopped}</div>
             </div>
             <div class="bg-surface p-4 rounded-xl border border-border">
                 <div class="text-[11px] text-secondary font-bold mb-1">أعطال نشطة</div>
-                <div class="text-2xl font-extrabold text-primary">${activeBrks}</div>
+                <div class="text-2xl font-extrabold text-primary">\${activeBrks}</div>
             </div>
             <div class="bg-surface p-4 rounded-xl border border-border border-r-4 border-r-red-800">
                 <div class="text-[11px] text-secondary font-bold mb-1">أعطال حرجة</div>
-                <div class="text-2xl font-extrabold text-red-700">${criticalBrks}</div>
+                <div class="text-2xl font-extrabold text-red-700">\${criticalBrks}</div>
             </div>
             <div class="bg-surface p-4 rounded-xl border border-border">
                 <div class="text-[11px] text-secondary font-bold mb-1">أوامر مفتوحة</div>
-                <div class="text-2xl font-extrabold text-action">${openWos}</div>
+                <div class="text-2xl font-extrabold text-action">\${openWos}</div>
             </div>
             <div class="bg-surface p-4 rounded-xl border border-border border-r-4 border-r-warning">
                 <div class="text-[11px] text-secondary font-bold mb-1">Low Stock</div>
-                <div class="text-2xl font-extrabold text-warning">${lowStock}</div>
+                <div class="text-2xl font-extrabold text-warning">\${lowStock}</div>
             </div>
             <div class="bg-surface p-4 rounded-xl border border-border">
                 <div class="text-[11px] text-secondary font-bold mb-1">Availability</div>
-                <div class="text-2xl font-extrabold text-primary">${availability}%</div>
+                <div class="text-2xl font-extrabold text-primary">\${availability}%</div>
             </div>
         </div>
 
@@ -440,15 +444,15 @@ const renderDashboard = () => {
             <div class="lg:col-span-4 bg-surface rounded-2xl border border-border p-5">
                 <div class="font-extrabold text-sm text-danger mb-3 flex items-center justify-between">
                     <span>تنبيهات حرجة (Critical Alerts)</span>
-                    <span class="bg-red-100 text-danger text-[10px] px-2 py-0.5 rounded-full font-bold">${criticalBrks}</span>
+                    <span class="bg-red-100 text-danger text-[10px] px-2 py-0.5 rounded-full font-bold">\${criticalBrks}</span>
                 </div>
                 <div class="space-y-2.5">
-                    ${brks.filter(b => b.priority === 'critical' || b.priority === 'حرج').slice(0, 3).map(b => `
+                    \${brks.filter(b => b.priority === 'critical' || b.priority === 'حرج').slice(0, 3).map(b => \`
                         <div class="border-r-4 border-danger bg-red-50/60 p-3 rounded-xl text-xs">
-                            <div class="font-bold text-red-900">${b.title || b.desc}</div>
-                            <div class="text-[11px] text-red-700 mt-1">${dbData.assets[b.assetId]?.name || b.assetId || 'ماكينة عامة'}</div>
+                            <div class="font-bold text-red-900">\${b.title || b.desc}</div>
+                            <div class="text-[11px] text-red-700 mt-1">\${dbData.assets[b.assetId]?.name || b.assetId || 'ماكينة عامة'}</div>
                         </div>
-                    `).join('') || '<div class="text-secondary text-xs text-center py-6 font-bold">لا توجد تنبيهات حرجة حالياً ✅</div>'}
+                    \`).join('') || '<div class="text-secondary text-xs text-center py-6 font-bold">لا توجد تنبيهات حرجة حالياً ✅</div>'}
                 </div>
             </div>
         </div>
@@ -458,7 +462,7 @@ const renderDashboard = () => {
             <div class="lg:col-span-7 bg-surface rounded-2xl border border-border p-5">
                 <div class="font-extrabold text-sm text-primary mb-3">أحدث أوامر العمل المفتوحة</div>
                 <div class="overflow-x-auto">
-                    ${wos.length ? `
+                    \${wos.length ? \`
                     <table class="w-full text-xs text-right">
                         <thead>
                             <tr class="text-secondary border-b border-border">
@@ -469,42 +473,42 @@ const renderDashboard = () => {
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border">
-                            ${wos.slice(0, 5).map(w => `
+                            \${wos.slice(0, 5).map(w => \`
                             <tr>
-                                <td class="py-2.5 font-bold text-secondary" dir="ltr">${w.id || 'WO-#'}</td>
-                                <td class="py-2.5 font-bold text-primary truncate max-w-xs">${w.description || w.title || '-'}</td>
-                                <td class="py-2.5">${w.tech || 'المدير العام'}</td>
-                                <td class="py-2.5"><span class="bg-blue-50 text-action px-2 py-0.5 rounded text-[10px] font-bold border border-blue-200">${w.status || 'جديد'}</span></td>
+                                <td class="py-2.5 font-bold text-secondary" dir="ltr">\${w.id || 'WO-#'}</td>
+                                <td class="py-2.5 font-bold text-primary truncate max-w-xs">\${w.description || w.title || '-'}</td>
+                                <td class="py-2.5">\${w.tech || 'المدير العام'}</td>
+                                <td class="py-2.5"><span class="bg-blue-50 text-action px-2 py-0.5 rounded text-[10px] font-bold border border-blue-200">\${w.status || 'جديد'}</span></td>
                             </tr>
-                            `).join('')}
+                            \`).join('')}
                         </tbody>
-                    </table>` : '<div class="text-secondary text-xs text-center py-6 font-bold">لا توجد أوامر عمل مفتوحة</div>'}
+                    </table>\` : '<div class="text-secondary text-xs text-center py-6 font-bold">لا توجد أوامر عمل مفتوحة</div>'}
                 </div>
             </div>
 
             <div class="lg:col-span-5 bg-surface rounded-2xl border border-border p-5">
                 <div class="font-extrabold text-sm text-warning mb-3">نواقص قطع الغيار (Low Stock)</div>
                 <div class="space-y-2">
-                    ${parts.filter(p => Number(p.qty) <= Number(p.min)).slice(0, 4).map(p => `
+                    \${parts.filter(p => Number(p.qty) <= Number(p.min)).slice(0, 4).map(p => \`
                         <div class="flex justify-between items-center py-2 border-b border-border last:border-0 text-xs">
                             <div>
-                                <div class="font-bold text-primary">${p.name}</div>
-                                <div class="text-[10px] text-secondary" dir="ltr">${p.code || '-'}</div>
+                                <div class="font-bold text-primary">\${p.name}</div>
+                                <div class="text-[10px] text-secondary" dir="ltr">\${p.code || '-'}</div>
                             </div>
-                            <div class="text-danger font-extrabold">${p.qty} / ${p.min} <span class="text-[10px] font-normal text-secondary">قطع</span></div>
+                            <div class="text-danger font-extrabold">\${p.qty} / \${p.min} <span class="text-[10px] font-normal text-secondary">قطع</span></div>
                         </div>
-                    `).join('') || '<div class="text-secondary text-xs text-center py-6 font-bold">المخزون كافٍ ومستقر ✅</div>'}
+                    \`).join('') || '<div class="text-secondary text-xs text-center py-6 font-bold">المخزون كافٍ ومستقر ✅</div>'}
                 </div>
             </div>
         </div>
-    `;
+    \`;
 };
 
 // ==========================================
 // 2. ASSETS
 // ==========================================
 window.openAddAsset = () => {
-    openModal("إضافة أصل / ماكينة جديدة", `
+    openModal("إضافة أصل / ماكينة جديدة", \`
         <div class="space-y-3.5">
             <div><label class="block text-xs font-bold mb-1">اسم الماكينة <span class="text-danger">*</span></label><input id="a-name" type="text" class="w-full border border-border p-2.5 rounded-xl text-xs" placeholder="ماكينة التعبئة FM-01"></div>
             <div><label class="block text-xs font-bold mb-1">الرقم التعريفي (Code)</label><input id="a-code" type="text" class="w-full border border-border p-2.5 rounded-xl text-xs" dir="ltr" placeholder="AST-1001"></div>
@@ -513,7 +517,7 @@ window.openAddAsset = () => {
                 <div><label class="block text-xs font-bold mb-1">الحالة</label><select id="a-status" class="w-full border border-border p-2.5 rounded-xl text-xs"><option value="active">تعمل (Running)</option><option value="stopped">متوقفة (Stopped)</option></select></div>
             </div>
         </div>
-    `, async () => {
+    \`, async () => {
         const name = document.getElementById('a-name').value.trim();
         if (!name) throw new Error('اسم الماكينة مطلوب');
         const code = document.getElementById('a-code').value.trim() || ('AST-' + Date.now().toString().slice(-4));
@@ -531,20 +535,20 @@ window.openAddAsset = () => {
 };
 
 const renderAssets = () => {
-    const rows = Object.entries(dbData.assets || {}).map(([id, a]) => `
+    const rows = Object.entries(dbData.assets || {}).map(([id, a]) => \`
         <tr class="hover:bg-gray-50 transition">
-            <td class="p-3.5 font-bold text-primary">${a.name}</td>
-            <td class="p-3.5 font-bold text-secondary" dir="ltr">${a.code || id}</td>
-            <td class="p-3.5">${a.department || '-'}</td>
-            <td class="p-3.5">${a.status === 'active' ? '<span class="px-2 py-0.5 bg-green-50 text-success border border-green-200 rounded text-[10px] font-bold">تعمل</span>' : '<span class="px-2 py-0.5 bg-red-50 text-danger border border-red-200 rounded text-[10px] font-bold">متوقفة</span>'}</td>
+            <td class="p-3.5 font-bold text-primary">\${a.name}</td>
+            <td class="p-3.5 font-bold text-secondary" dir="ltr">\${a.code || id}</td>
+            <td class="p-3.5">\${a.department || '-'}</td>
+            <td class="p-3.5">\${a.status === 'active' ? '<span class="px-2 py-0.5 bg-green-50 text-success border border-green-200 rounded text-[10px] font-bold">تعمل</span>' : '<span class="px-2 py-0.5 bg-red-50 text-danger border border-red-200 rounded text-[10px] font-bold">متوقفة</span>'}</td>
             <td class="p-3.5">
-                <button onclick="showQrModal('${a.code || id}', '${a.name}')" class="text-xs bg-gray-100 hover:bg-gray-200 text-primary px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5">
+                <button onclick="showQrModal('\${a.code || id}', '\${a.name}')" class="text-xs bg-gray-100 hover:bg-gray-200 text-primary px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
                     QR Code
                 </button>
             </td>
         </tr>
-    `);
+    \`);
     elContent.innerHTML = createTable(['اسم الماكينة', 'الرمز التعريفي', 'القسم', 'الحالة', 'إجراءات'], rows, 'openAddAsset()', 'إضافة ماكينة');
 };
 
@@ -553,16 +557,16 @@ const renderAssets = () => {
 // ==========================================
 window.openAddWO = () => {
     const as = Object.entries(dbData.assets || {}).map(([id, a]) => '<option value="' + id + '">' + a.name + '</option>').join('');
-    openModal("إنشاء أمر عمل جديد", `
+    openModal("إنشاء أمر عمل جديد", \`
         <div class="space-y-3.5">
             <div><label class="block text-xs font-bold mb-1">وصف العمل <span class="text-danger">*</span></label><input id="wo-desc" type="text" class="w-full border border-border p-2.5 rounded-xl text-xs" placeholder="صيانة وقائية / تبديل رمان بلي"></div>
-            <div><label class="block text-xs font-bold mb-1">الماكينة المعنية</label><select id="wo-asset" class="w-full border border-border p-2.5 rounded-xl text-xs"><option value="">-- اختر ماكينة --</option>${as}</select></div>
+            <div><label class="block text-xs font-bold mb-1">الماكينة المعنية</label><select id="wo-asset" class="w-full border border-border p-2.5 rounded-xl text-xs"><option value="">-- اختر ماكينة --</option>\${as}</select></div>
             <div class="grid grid-cols-2 gap-3">
                 <div><label class="block text-xs font-bold mb-1">الفني المسند إليه</label><input id="wo-tech" type="text" class="w-full border border-border p-2.5 rounded-xl text-xs" value="المدير العام"></div>
                 <div><label class="block text-xs font-bold mb-1">الأولوية</label><select id="wo-pri" class="w-full border border-border p-2.5 rounded-xl text-xs"><option value="عادي">عادي</option><option value="عاجل">عاجل</option><option value="حرج">حرج</option></select></div>
             </div>
         </div>
-    `, async () => {
+    \`, async () => {
         const desc = document.getElementById('wo-desc').value.trim();
         if (!desc) throw new Error('الوصف مطلوب');
         const id = 'WO-' + Date.now().toString().slice(-5);
@@ -604,41 +608,41 @@ const renderWorkOrders = () => {
 
     let kanbanHtml = '<div class="flex gap-4 overflow-x-auto pb-4 h-[calc(100vh-210px)]">';
     Object.entries(cols).forEach(([statusKey, col]) => {
-        kanbanHtml += `
+        kanbanHtml += \`
         <div class="flex-none w-72 bg-white border border-border rounded-2xl flex flex-col max-h-full shadow-sm">
             <div class="p-3.5 border-b border-border flex justify-between items-center bg-gray-50/60 rounded-t-2xl">
-                <span class="font-extrabold text-xs text-primary">${col.title}</span>
-                <span class="${col.color} text-[10px] font-bold px-2 py-0.5 rounded-full">${col.items.length}</span>
+                <span class="font-extrabold text-xs text-primary">\${col.title}</span>
+                <span class="\${col.color} text-[10px] font-bold px-2 py-0.5 rounded-full">\${col.items.length}</span>
             </div>
             <div class="p-3 flex-1 overflow-y-auto space-y-3">
-                ${col.items.map(item => {
+                \${col.items.map(item => {
                     const ast = dbData.assets[item.assetId];
-                    return `
+                    return \`
                     <div class="bg-surface p-3.5 rounded-xl border border-border shadow-sm hover:border-action transition flex flex-col gap-2">
                         <div class="flex justify-between items-center">
-                            <span class="text-[10px] font-extrabold text-secondary" dir="ltr">${item.id || 'WO'}</span>
-                            ${item.priority === 'حرج' || item.priority === 'critical' ? '<span class="bg-red-100 text-danger text-[9px] font-bold px-1.5 py-0.5 rounded">حرج</span>' : ''}
+                            <span class="text-[10px] font-extrabold text-secondary" dir="ltr">\${item.id || 'WO'}</span>
+                            \${item.priority === 'حرج' || item.priority === 'critical' ? '<span class="bg-red-100 text-danger text-[9px] font-bold px-1.5 py-0.5 rounded">حرج</span>' : ''}
                         </div>
-                        <div class="font-bold text-xs text-primary">${item.description || item.title || '-'}</div>
-                        <div class="text-[11px] text-secondary font-bold">${ast ? ast.name : (item.assetId || '')}</div>
+                        <div class="font-bold text-xs text-primary">\${item.description || item.title || '-'}</div>
+                        <div class="text-[11px] text-secondary font-bold">\${ast ? ast.name : (item.assetId || '')}</div>
                         <div class="flex justify-between items-center pt-2 border-t border-border mt-1">
-                            <span class="text-[10px] text-gray-500 font-bold">${item.tech || 'المدير العام'}</span>
-                            <select onchange="changeWOStatus('${item.id}', this.value)" class="text-[10px] border border-border rounded px-1.5 py-1 bg-white font-bold outline-none cursor-pointer">
-                                <option value="New" ${statusKey === 'New' ? 'selected' : ''}>جديد</option>
-                                <option value="Assigned" ${statusKey === 'Assigned' ? 'selected' : ''}>تم الإسناد</option>
-                                <option value="In Progress" ${statusKey === 'In Progress' ? 'selected' : ''}>قيد العمل</option>
-                                <option value="Waiting Parts" ${statusKey === 'Waiting Parts' ? 'selected' : ''}>بانتظار قطع</option>
-                                <option value="Completed" ${statusKey === 'Completed' ? 'selected' : ''}>مكتمل</option>
+                            <span class="text-[10px] text-gray-500 font-bold">\${item.tech || 'المدير العام'}</span>
+                            <select onchange="changeWOStatus('\${item.id}', this.value)" class="text-[10px] border border-border rounded px-1.5 py-1 bg-white font-bold outline-none cursor-pointer">
+                                <option value="New" \${statusKey === 'New' ? 'selected' : ''}>جديد</option>
+                                <option value="Assigned" \${statusKey === 'Assigned' ? 'selected' : ''}>تم الإسناد</option>
+                                <option value="In Progress" \${statusKey === 'In Progress' ? 'selected' : ''}>قيد العمل</option>
+                                <option value="Waiting Parts" \${statusKey === 'Waiting Parts' ? 'selected' : ''}>بانتظار قطع</option>
+                                <option value="Completed" \${statusKey === 'Completed' ? 'selected' : ''}>مكتمل</option>
                             </select>
                         </div>
-                    </div>`;
+                    </div>\`;
                 }).join('') || '<div class="text-center py-8 text-gray-400 text-[11px] font-bold">فارغ</div>'}
             </div>
-        </div>`;
+        </div>\`;
     });
     kanbanHtml += '</div>';
 
-    elContent.innerHTML = `
+    elContent.innerHTML = \`
         <div class="mb-5 flex justify-between items-center">
             <div>
                 <h3 class="font-extrabold text-base text-primary">لوحة كانبان لأوامر العمل</h3>
@@ -649,8 +653,8 @@ const renderWorkOrders = () => {
                 أمر عمل جديد
             </button>
         </div>
-        ${kanbanHtml}
-    `;
+        \${kanbanHtml}
+    \`;
 };
 
 // ==========================================
@@ -658,13 +662,13 @@ const renderWorkOrders = () => {
 // ==========================================
 window.openAddBreakdown = () => {
     const as = Object.entries(dbData.assets || {}).map(([id, a]) => '<option value="' + id + '">' + a.name + '</option>').join('');
-    openModal("تسجيل بلاغ عطل طارئ", `
+    openModal("تسجيل بلاغ عطل طارئ", \`
         <div class="space-y-3.5">
-            <div><label class="block text-xs font-bold mb-1">الماكينة المتعطلة <span class="text-danger">*</span></label><select id="b-asset" class="w-full border border-border p-2.5 rounded-xl text-xs"><option value="">-- اختر الماكينة --</option>${as}</select></div>
+            <div><label class="block text-xs font-bold mb-1">الماكينة المتعطلة <span class="text-danger">*</span></label><select id="b-asset" class="w-full border border-border p-2.5 rounded-xl text-xs"><option value="">-- اختر الماكينة --</option>\${as}</select></div>
             <div><label class="block text-xs font-bold mb-1">وصف العطل <span class="text-danger">*</span></label><textarea id="b-desc" class="w-full border border-border p-2.5 rounded-xl text-xs h-20" placeholder="ارتفاع درجة الحرارة، اهتزاز، توقف مفاجئ..."></textarea></div>
             <div><label class="block text-xs font-bold mb-1">درجة الخطورة</label><select id="b-pri" class="w-full border border-border p-2.5 rounded-xl text-xs"><option value="حرج">حرج (Critical)</option><option value="عاجل">عاجل (Urgent)</option><option value="عادي">عادي (Normal)</option></select></div>
         </div>
-    `, async () => {
+    \`, async () => {
         const aId = document.getElementById('b-asset').value;
         const desc = document.getElementById('b-desc').value.trim();
         if (!aId) throw new Error('يجب اختيار الماكينة');
@@ -687,15 +691,15 @@ window.openAddBreakdown = () => {
 const renderBreakdowns = () => {
     const rows = Object.entries(dbData.breakdowns || {}).map(([id, b]) => {
         const ast = dbData.assets[b.assetId];
-        return `
+        return \`
         <tr class="hover:bg-gray-50 transition">
-            <td class="p-3.5 font-bold text-secondary" dir="ltr">${b.id || id}</td>
-            <td class="p-3.5 font-bold text-primary">${ast ? ast.name : (b.assetId || '-')}</td>
-            <td class="p-3.5 font-bold text-primary">${b.title || b.desc || '-'}</td>
-            <td class="p-3.5">${b.priority === 'حرج' || b.priority === 'critical' ? '<span class="px-2 py-0.5 bg-red-50 text-danger border border-red-200 rounded text-[10px] font-bold">حرج</span>' : '<span class="px-2 py-0.5 bg-yellow-50 text-warning border border-yellow-200 rounded text-[10px] font-bold">${b.priority || 'عادي'}</span>'}</td>
-            <td class="p-3.5"><span class="px-2 py-0.5 bg-blue-50 text-action border border-blue-200 rounded text-[10px] font-bold">${b.status || 'New'}</span></td>
-            <td class="p-3.5 text-secondary text-[11px]" dir="ltr">${new Date(b.time || Date.now()).toLocaleTimeString('ar-IQ')}</td>
-        </tr>`;
+            <td class="p-3.5 font-bold text-secondary" dir="ltr">\${b.id || id}</td>
+            <td class="p-3.5 font-bold text-primary">\${ast ? ast.name : (b.assetId || '-')}</td>
+            <td class="p-3.5 font-bold text-primary">\${b.title || b.desc || '-'}</td>
+            <td class="p-3.5">\${b.priority === 'حرج' || b.priority === 'critical' ? '<span class="px-2 py-0.5 bg-red-50 text-danger border border-red-200 rounded text-[10px] font-bold">حرج</span>' : '<span class="px-2 py-0.5 bg-yellow-50 text-warning border border-yellow-200 rounded text-[10px] font-bold">\${b.priority || 'عادي'}</span>'}</td>
+            <td class="p-3.5"><span class="px-2 py-0.5 bg-blue-50 text-action border border-blue-200 rounded text-[10px] font-bold">\${b.status || 'New'}</span></td>
+            <td class="p-3.5 text-secondary text-[11px]" dir="ltr">\${new Date(b.time || Date.now()).toLocaleTimeString('ar-IQ')}</td>
+        </tr>\`;
     });
     elContent.innerHTML = createTable(['رقم البلاغ', 'الماكينة', 'الوصف', 'الخطورة', 'الحالة', 'الوقت'], rows, 'openAddBreakdown()', 'إبلاغ عن عطل');
 };
@@ -704,7 +708,7 @@ const renderBreakdowns = () => {
 // 5. INVENTORY
 // ==========================================
 window.openAddPart = () => {
-    openModal("إضافة قطعة غيار إلى المستودع", `
+    openModal("إضافة قطعة غيار إلى المستودع", \`
         <div class="space-y-3.5">
             <div><label class="block text-xs font-bold mb-1">اسم القطعة <span class="text-danger">*</span></label><input id="p-name" type="text" class="w-full border border-border p-2.5 rounded-xl text-xs" placeholder="Bearing 6205"></div>
             <div><label class="block text-xs font-bold mb-1">رقم القطعة / الباركود</label><input id="p-code" type="text" class="w-full border border-border p-2.5 rounded-xl text-xs" dir="ltr" placeholder="SKF-6205"></div>
@@ -714,7 +718,7 @@ window.openAddPart = () => {
             </div>
             <div><label class="block text-xs font-bold mb-1">الموقع في المخزن</label><input id="p-loc" type="text" class="w-full border border-border p-2.5 rounded-xl text-xs" placeholder="رف A-04"></div>
         </div>
-    `, async () => {
+    \`, async () => {
         const name = document.getElementById('p-name').value.trim();
         if (!name) throw new Error('اسم القطعة مطلوب');
         const id = 'SP-' + Date.now().toString().slice(-4);
@@ -735,15 +739,15 @@ window.openAddPart = () => {
 const renderInventory = () => {
     const rows = Object.entries(dbData.spareParts || {}).map(([id, p]) => {
         const isLow = Number(p.qty) <= Number(p.min);
-        return `
+        return \`
         <tr class="hover:bg-gray-50 transition">
-            <td class="p-3.5 font-bold text-primary">${p.name}</td>
-            <td class="p-3.5 font-bold text-secondary" dir="ltr">${p.code || id}</td>
-            <td class="p-3.5 font-extrabold ${isLow ? 'text-danger' : 'text-primary'}">${p.qty}</td>
-            <td class="p-3.5 text-secondary">${p.min}</td>
-            <td class="p-3.5">${p.location || 'المستودع الرئيسي'}</td>
-            <td class="p-3.5">${isLow ? '<span class="px-2 py-0.5 bg-red-50 text-danger border border-red-200 rounded text-[10px] font-bold">نقص (Low)</span>' : '<span class="px-2 py-0.5 bg-green-50 text-success border border-green-200 rounded text-[10px] font-bold">متوفر</span>'}</td>
-        </tr>`;
+            <td class="p-3.5 font-bold text-primary">\${p.name}</td>
+            <td class="p-3.5 font-bold text-secondary" dir="ltr">\${p.code || id}</td>
+            <td class="p-3.5 font-extrabold \${isLow ? 'text-danger' : 'text-primary'}">\${p.qty}</td>
+            <td class="p-3.5 text-secondary">\${p.min}</td>
+            <td class="p-3.5">\${p.location || 'المستودع الرئيسي'}</td>
+            <td class="p-3.5">\${isLow ? '<span class="px-2 py-0.5 bg-red-50 text-danger border border-red-200 rounded text-[10px] font-bold">نقص (Low)</span>' : '<span class="px-2 py-0.5 bg-green-50 text-success border border-green-200 rounded text-[10px] font-bold">متوفر</span>'}</td>
+        </tr>\`;
     });
     elContent.innerHTML = createTable(['اسم القطعة', 'الرمز التعريفي', 'الكمية', 'الحد الأدنى', 'الموقع', 'الحالة'], rows, 'openAddPart()', 'إضافة قطعة');
 };
@@ -752,7 +756,7 @@ const renderInventory = () => {
 // 6. EMPLOYEES
 // ==========================================
 window.openAddEmployee = () => {
-    openModal("إضافة موظف / فني جديد", `
+    openModal("إضافة موظف / فني جديد", \`
         <div class="space-y-3.5">
             <div><label class="block text-xs font-bold mb-1">البريد الإلكتروني <span class="text-danger">*</span></label><input id="e-email" type="email" class="w-full border border-border p-2.5 rounded-xl text-xs" dir="ltr" placeholder="tech@company.com"></div>
             <div><label class="block text-xs font-bold mb-1">الاسم الكامل <span class="text-danger">*</span></label><input id="e-name" type="text" class="w-full border border-border p-2.5 rounded-xl text-xs" placeholder="أحمد كريم"></div>
@@ -761,7 +765,7 @@ window.openAddEmployee = () => {
                 <div><label class="block text-xs font-bold mb-1">القسم / التخصص</label><input id="e-dep" type="text" class="w-full border border-border p-2.5 rounded-xl text-xs" placeholder="ميكانيك / كهرباء"></div>
             </div>
         </div>
-    `, async () => {
+    \`, async () => {
         const email = document.getElementById('e-email').value.trim();
         const name = document.getElementById('e-name').value.trim();
         if (!email) throw new Error('البريد مطلوب');
@@ -781,14 +785,14 @@ window.openAddEmployee = () => {
 };
 
 const renderEmployees = () => {
-    const rows = Object.values(dbData.users || {}).map(u => `
+    const rows = Object.values(dbData.users || {}).map(u => \`
         <tr class="hover:bg-gray-50 transition">
-            <td class="p-3.5 font-bold text-primary">${u.name || 'موظف'}</td>
-            <td class="p-3.5 font-bold text-secondary text-[11px]" dir="ltr">${u.email}</td>
-            <td class="p-3.5">${u.department || 'الصيانة العامة'}</td>
-            <td class="p-3.5"><span class="px-2 py-0.5 bg-gray-100 border border-border rounded text-[10px] font-bold text-primary">${u.roleId || 'technician'}</span></td>
-            <td class="p-3.5">${u.status === 'active' ? '<span class="text-success font-bold text-xs">نشط</span>' : '<span class="text-danger font-bold text-xs">معطل</span>'}</td>
-        </tr>`);
+            <td class="p-3.5 font-bold text-primary">\${u.name || 'موظف'}</td>
+            <td class="p-3.5 font-bold text-secondary text-[11px]" dir="ltr">\${u.email}</td>
+            <td class="p-3.5">\${u.department || 'الصيانة العامة'}</td>
+            <td class="p-3.5"><span class="px-2 py-0.5 bg-gray-100 border border-border rounded text-[10px] font-bold text-primary">\${u.roleId || 'technician'}</span></td>
+            <td class="p-3.5">\${u.status === 'active' ? '<span class="text-success font-bold text-xs">نشط</span>' : '<span class="text-danger font-bold text-xs">معطل</span>'}</td>
+        </tr>\`);
     elContent.innerHTML = createTable(['الاسم الكامل', 'البريد الإلكتروني', 'القسم / التخصص', 'الدور', 'الحالة'], rows, 'openAddEmployee()', 'إضافة موظف');
 };
 
@@ -796,13 +800,13 @@ const renderEmployees = () => {
 // 7. USERS & ROLES
 // ==========================================
 const renderUsers = () => {
-    const rows = Object.entries(dbData.users || {}).map(([uid, u]) => `
+    const rows = Object.entries(dbData.users || {}).map(([uid, u]) => \`
         <tr class="hover:bg-gray-50 transition">
-            <td class="p-3.5 font-bold text-primary">${u.name || '-'} ${u.isSuperAdmin ? '⭐ (Super Admin)' : ''}</td>
-            <td class="p-3.5 font-bold text-secondary text-[11px]" dir="ltr">${u.email}</td>
-            <td class="p-3.5"><span class="px-2 py-0.5 bg-blue-50 text-action border border-blue-200 rounded text-[10px] font-bold">${u.roleId || 'technician'}</span></td>
-            <td class="p-3.5">${u.status === 'active' ? '<span class="text-success font-bold text-xs">نشط</span>' : '<span class="text-danger font-bold text-xs">معطل</span>'}</td>
-        </tr>`);
+            <td class="p-3.5 font-bold text-primary">\${u.name || '-'} \${u.isSuperAdmin ? '⭐ (Super Admin)' : ''}</td>
+            <td class="p-3.5 font-bold text-secondary text-[11px]" dir="ltr">\${u.email}</td>
+            <td class="p-3.5"><span class="px-2 py-0.5 bg-blue-50 text-action border border-blue-200 rounded text-[10px] font-bold">\${u.roleId || 'technician'}</span></td>
+            <td class="p-3.5">\${u.status === 'active' ? '<span class="text-success font-bold text-xs">نشط</span>' : '<span class="text-danger font-bold text-xs">معطل</span>'}</td>
+        </tr>\`);
     elContent.innerHTML = createTable(['المستخدم', 'البريد الإلكتروني', 'الدور والصلاحيات', 'الحالة'], rows, null, null);
 };
 
@@ -810,13 +814,13 @@ const renderUsers = () => {
 // 8. AUDIT LOGS
 // ==========================================
 const renderAudit = () => {
-    const rows = Object.values(dbData.auditLogs || {}).map(a => `
+    const rows = Object.values(dbData.auditLogs || {}).map(a => \`
         <tr class="hover:bg-gray-50 transition">
-            <td class="p-3.5 text-secondary text-[11px]" dir="ltr">${new Date(a.date || Date.now()).toLocaleString('ar-IQ')}</td>
-            <td class="p-3.5 font-bold text-primary">${a.action}</td>
-            <td class="p-3.5 text-secondary">${a.details || '-'}</td>
-            <td class="p-3.5 text-xs text-gray-500 font-bold" dir="ltr">${a.user || 'System'}</td>
-        </tr>`);
+            <td class="p-3.5 text-secondary text-[11px]" dir="ltr">\${new Date(a.date || Date.now()).toLocaleString('ar-IQ')}</td>
+            <td class="p-3.5 font-bold text-primary">\${a.action}</td>
+            <td class="p-3.5 text-secondary">\${a.details || '-'}</td>
+            <td class="p-3.5 text-xs text-gray-500 font-bold" dir="ltr">\${a.user || 'System'}</td>
+        </tr>\`);
     elContent.innerHTML = createTable(['الوقت والتاريخ', 'العملية', 'التفاصيل', 'المستخدم'], rows, null, null);
 };
 
@@ -870,7 +874,7 @@ window.seedFullDemoData = async () => {
 };
 
 const renderSettings = () => {
-    elContent.innerHTML = `
+    elContent.innerHTML = \`
         <div class="max-w-3xl space-y-6">
             <div class="bg-surface p-6 rounded-2xl border border-border shadow-sm">
                 <h3 class="font-extrabold text-base text-primary mb-1">بيانات المنشأة الصناعية</h3>
@@ -892,7 +896,7 @@ const renderSettings = () => {
                 </button>
             </div>
         </div>
-    `;
+    \`;
 };
 
 // ==========================================
@@ -988,3 +992,383 @@ onAuthStateChanged(auth, async (user) => {
 </script>
 </body>
 </html>
+`;
+
+// Write admin.html
+fs.writeFileSync('admin.html', adminHtmlContent, 'utf8');
+console.log('Clean admin.html written successfully!');
+
+// Now write clean employee.html
+const employeeHtmlContent = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الموظف - CMMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#F4F5F7',
+                        surface: '#FFFFFF',
+                        primary: '#17202A',
+                        secondary: '#667085',
+                        border: '#E1E4E8',
+                        action: '#2563EB',
+                        success: '#16A34A',
+                        warning: '#D97706',
+                        danger: '#DC2626'
+                    },
+                    fontFamily: { sans: ['Cairo', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #F4F5F7; }
+        .hide { display: none !important; }
+        .nav-btn.active { color: #2563EB; font-weight: bold; }
+        .nav-btn { color: #667085; }
+        #toast-container > div { animation: slideIn 0.3s ease-out forwards; }
+        @keyframes slideIn { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-background text-primary h-screen flex flex-col overflow-hidden">
+    
+    <div id="toast-container" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-2 w-full max-w-sm px-4"></div>
+
+    <!-- Login -->
+    <div id="login-view" class="h-full flex items-center justify-center p-4">
+        <div class="bg-surface p-8 rounded-2xl shadow-xl w-full max-w-sm border border-border">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-action text-white font-extrabold text-xl mb-2 shadow">C</div>
+                <h2 class="text-xl font-extrabold text-primary">بوابة الموظفين والفنيين</h2>
+                <p class="text-xs text-secondary mt-1 font-bold">نظام CMMS الذكي</p>
+            </div>
+            
+            <div id="login-error" class="hide bg-red-50 border border-red-200 text-danger p-3 rounded-xl mb-4 text-xs text-center font-bold"></div>
+            
+            <form id="login-form" class="space-y-4">
+                <input type="email" id="email" required placeholder="البريد الإلكتروني" class="w-full px-4 py-2.5 border border-border rounded-xl text-xs outline-none focus:border-action" dir="ltr">
+                <input type="password" id="password" required placeholder="كلمة المرور" class="w-full px-4 py-2.5 border border-border rounded-xl text-xs outline-none focus:border-action" dir="ltr">
+                <button type="submit" class="w-full bg-action text-white font-bold py-2.5 rounded-xl text-xs hover:bg-blue-700 shadow-sm transition">دخول</button>
+            </form>
+            
+            <div class="mt-5 flex items-center gap-3">
+                <div class="h-[1px] bg-border flex-1"></div>
+                <span class="text-xs text-secondary font-bold">أو</span>
+                <div class="h-[1px] bg-border flex-1"></div>
+            </div>
+            
+            <button id="btn-google" class="mt-4 w-full border border-border bg-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 hover:bg-gray-50 shadow-sm transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .5 4.1 1.5l3.1-3.1C17.3 1.6 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.8s.2-2.1.4-2.8L1.9 6.3C.7 8.7 0 10.8 0 12s.7 3.3 1.9 5.7l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.3-6.4-5.2L1.9 16c1.8 3.7 5.6 7 10.1 7z"/></svg>
+                الدخول عبر Google
+            </button>
+        </div>
+    </div>
+
+    <!-- App View -->
+    <div id="app-view" class="hide flex-col h-full bg-background">
+        
+        <!-- Header -->
+        <header class="bg-[#18212B] text-white p-4 flex justify-between items-center shadow-sm shrink-0 z-10">
+            <div class="flex items-center gap-3">
+                <div id="user-initial" class="w-9 h-9 rounded-xl bg-action flex items-center justify-center font-extrabold text-sm text-white shadow">ا</div>
+                <div>
+                    <h1 id="user-name" class="font-extrabold text-xs">مرحباً بك</h1>
+                    <p id="user-role" class="text-[10px] text-gray-400">فني صيانة</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="admin.html" class="text-[10px] bg-white/10 hover:bg-white/20 text-white font-bold px-2.5 py-1.5 rounded-lg transition">الإدارة</a>
+                <button id="btn-logout" class="p-1.5 text-gray-400 hover:text-white bg-white/5 rounded-lg">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto p-4 pb-24" id="content"></main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bg-surface border-t border-border flex justify-around p-2.5 shrink-0 fixed bottom-0 w-full z-20 shadow-lg">
+            <button class="nav-btn active flex flex-col items-center gap-1 w-20 py-1" data-tab="home">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                <span class="text-[11px]">الرئيسية</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center gap-1 w-20 py-1" data-tab="scan">
+                <div class="bg-action text-white p-2.5 rounded-full shadow-md -mt-5 border-2 border-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                </div>
+                <span class="text-[11px]">مسح QR</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center gap-1 w-20 py-1" data-tab="tasks">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                <span class="text-[11px]">مهامي</span>
+            </button>
+        </nav>
+    </div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getDatabase, ref, get, set, update, push, child, onValue, remove } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+const firebaseConfig = { 
+    apiKey: "AIzaSyDtzonzkDsEvF9KNXi70j6ZTXG5kLAM_0c", 
+    authDomain: "cmms-37512.firebaseapp.com", 
+    databaseURL: "https://cmms-37512-default-rtdb.asia-southeast1.firebasedatabase.app", 
+    projectId: "cmms-37512", 
+    storageBucket: "cmms-37512.firebasestorage.app", 
+    messagingSenderId: "451592788539", 
+    appId: "1:451592788539:web:d3dc3e68b1543996b39a1e" 
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+const googleProvider = new GoogleAuthProvider();
+
+window.showToast = (msg, type = 'success') => {
+    const c = document.getElementById('toast-container');
+    const d = document.createElement('div');
+    d.className = 'p-3 px-4 rounded-xl shadow-lg font-bold text-white text-xs flex items-center justify-between ' + (type === 'success' ? 'bg-success' : 'bg-danger');
+    d.textContent = msg;
+    c.appendChild(d);
+    setTimeout(() => {
+        d.style.opacity = '0';
+        d.style.transition = 'opacity 0.3s';
+        setTimeout(() => d.remove(), 300);
+    }, 3000);
+};
+
+const elLogin = document.getElementById('login-view');
+const elApp = document.getElementById('app-view');
+const elContent = document.getElementById('content');
+
+let currentUser = null;
+let currentProfile = null;
+let currentTab = 'home';
+let myTasks = [];
+let dbData = { assets: {}, workOrders: {} };
+
+window.updateStatus = async (id, status) => {
+    try {
+        await update(ref(db, 'workOrders/' + id), { status });
+        showToast('تم تحديث المهمة إلى ' + status);
+    } catch(e) {
+        showToast('خطأ: ' + e.message, 'error');
+    }
+};
+
+window.renderTab = () => {
+    if (currentTab === 'home') {
+        const inProgressCount = myTasks.filter(t => t.status === 'In Progress' || t.status === 'قيد العمل').length;
+        const newCount = myTasks.filter(t => t.status === 'New' || t.status === 'جديد' || t.status === 'Assigned').length;
+
+        elContent.innerHTML = \`
+            <div class="mb-5">
+                <div class="text-xs text-secondary font-bold mb-1">ملخص النشاط اليومي</div>
+                <h2 class="text-lg font-extrabold text-primary mb-3">مهام الصيانة الموكلة إليك</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-surface p-4 rounded-2xl border border-border text-center shadow-sm">
+                        <div class="text-secondary text-[11px] font-bold mb-1">قيد العمل</div>
+                        <div class="text-3xl font-extrabold text-action">\${inProgressCount}</div>
+                    </div>
+                    <div class="bg-surface p-4 rounded-2xl border border-border text-center shadow-sm">
+                        <div class="text-secondary text-[11px] font-bold mb-1">مهام جديدة</div>
+                        <div class="text-3xl font-extrabold text-primary">\${newCount}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-extrabold text-sm text-primary">أحدث أوامر العمل</h3>
+                    <button onclick="currentTab='tasks'; document.querySelectorAll('.nav-btn')[2].click();" class="text-action text-xs font-bold hover:underline">عرض الكل</button>
+                </div>
+                <div class="space-y-3">
+                    \${myTasks.slice(0, 5).map(t => {
+                        const ast = t.assetId ? (dbData.assets[t.assetId]?.name || t.assetId) : 'ماكينة عامة';
+                        return \`
+                        <div class="bg-surface p-4 rounded-2xl border border-border shadow-sm flex flex-col gap-2.5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="font-extrabold text-xs text-primary">\${t.description || t.title || 'مهمة صيانة'}</div>
+                                    <div class="text-[11px] text-secondary font-bold mt-0.5">\${ast}</div>
+                                </div>
+                                <span class="px-2 py-0.5 bg-blue-50 text-action border border-blue-200 rounded text-[10px] font-bold">\${t.status || 'جديد'}</span>
+                            </div>
+                            <div class="flex gap-2 pt-2 border-t border-border">
+                                <button onclick="updateStatus('\${t.id}', 'In Progress')" class="flex-1 bg-action/10 hover:bg-action text-action hover:text-white py-1.5 rounded-xl text-xs font-bold transition">بدء العمل</button>
+                                <button onclick="updateStatus('\${t.id}', 'Completed')" class="flex-1 bg-green-50 hover:bg-success text-success hover:text-white py-1.5 rounded-xl text-xs font-bold transition">إتمام</button>
+                            </div>
+                        </div>\`;
+                    }).join('') || '<div class="bg-surface p-8 rounded-2xl border border-border text-center text-secondary text-xs font-bold shadow-sm">لا توجد مهام موكلة حالياً ✅</div>'}
+                </div>
+            </div>
+        \`;
+    } else if (currentTab === 'scan') {
+        elContent.innerHTML = \`
+            <div class="bg-surface p-5 rounded-2xl border border-border shadow-sm text-center">
+                <h3 class="font-extrabold text-base mb-1">مسح كود الماكينة (QR Code)</h3>
+                <p class="text-xs text-secondary mb-4">وجه الكاميرا نحو كود الماكينة لفتح بطاقتها فوراً</p>
+                <div id="qr-reader" class="w-full max-w-xs mx-auto rounded-xl overflow-hidden bg-black aspect-square flex items-center justify-center text-white text-xs">
+                    <span id="qr-status">جاري تشغيل الكاميرا...</span>
+                </div>
+                
+                <div class="mt-5 pt-4 border-t border-border">
+                    <p class="text-xs text-secondary font-bold mb-2">أو أدخل رمز الماكينة يدوياً:</p>
+                    <div class="flex gap-2 max-w-xs mx-auto">
+                        <input id="manual-code" type="text" placeholder="مثال: FM-01" class="border border-border rounded-xl px-3 py-2 text-xs flex-1 outline-none uppercase font-bold" dir="ltr">
+                        <button onclick="handleManualAsset(document.getElementById('manual-code').value)" class="bg-action text-white px-4 py-2 rounded-xl text-xs font-bold">بحث</button>
+                    </div>
+                </div>
+            </div>
+        \`;
+
+        setTimeout(() => {
+            if (window.Html5Qrcode) {
+                try {
+                    const html5QrCode = new Html5Qrcode("qr-reader");
+                    html5QrCode.start(
+                        { facingMode: "environment" },
+                        { fps: 10, qrbox: { width: 220, height: 220 } },
+                        (decodedText) => {
+                            html5QrCode.stop().then(() => {
+                                handleManualAsset(decodedText.trim());
+                            });
+                        },
+                        () => {}
+                    ).catch(err => {
+                        const el = document.getElementById('qr-status');
+                        if (el) el.innerHTML = 'تعذر تشغيل الكاميرا.<br>يرجى استخدام البحث اليدوي بالأسفل.';
+                    });
+                } catch(e) {
+                    const el = document.getElementById('qr-status');
+                    if (el) el.textContent = 'استخدم البحث اليدوي بالأسفل.';
+                }
+            }
+        }, 300);
+
+    } else if (currentTab === 'tasks') {
+        elContent.innerHTML = \`
+            <div class="mb-4 flex justify-between items-center">
+                <h2 class="font-extrabold text-base text-primary">جميع مهامي الموكلة</h2>
+                <span class="text-xs text-secondary font-bold">\${myTasks.length} مهمة</span>
+            </div>
+            <div class="space-y-3">
+                \${myTasks.map(t => {
+                    const ast = t.assetId ? (dbData.assets[t.assetId]?.name || t.assetId) : 'ماكينة عامة';
+                    return \`
+                    <div class="bg-surface p-4 rounded-2xl border border-border shadow-sm flex flex-col gap-2.5">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="font-extrabold text-xs text-primary">\${t.description || t.title}</div>
+                                <div class="text-[11px] text-secondary font-bold mt-0.5">\${ast}</div>
+                            </div>
+                            <span class="px-2 py-0.5 bg-gray-100 border border-border rounded text-[10px] font-bold">\${t.status || 'New'}</span>
+                        </div>
+                        <div class="flex gap-2 pt-2 border-t border-border">
+                            <button onclick="updateStatus('\${t.id}', 'In Progress')" class="flex-1 bg-action/10 hover:bg-action text-action hover:text-white py-1.5 rounded-xl text-xs font-bold transition">بدء العمل</button>
+                            <button onclick="updateStatus('\${t.id}', 'Completed')" class="flex-1 bg-green-50 hover:bg-success text-success hover:text-white py-1.5 rounded-xl text-xs font-bold transition">إتمام</button>
+                        </div>
+                    </div>\`;
+                }).join('') || '<div class="bg-surface p-10 rounded-2xl border border-border text-center text-secondary text-xs font-bold shadow-sm">لا توجد أي مهام مسجلة لديك ✅</div>'}
+            </div>
+        \`;
+    }
+};
+
+window.handleManualAsset = (code) => {
+    if (!code) return;
+    const cleanCode = code.trim().toLowerCase();
+    const foundEntry = Object.entries(dbData.assets || {}).find(([id, a]) => {
+        return id.toLowerCase() === cleanCode || (a.code && a.code.toLowerCase() === cleanCode);
+    });
+    
+    if (foundEntry) {
+        const [id, a] = foundEntry;
+        showToast('تم العثور على: ' + a.name);
+        alert('بطاقة الماكينة:\\n\\nالاسم: ' + a.name + '\\nالرمز: ' + (a.code || id) + '\\nالقسم: ' + (a.department || '-') + '\\nالحالة: ' + (a.status === 'active' ? 'تعمل' : 'متوقفة'));
+    } else {
+        showToast('الماكينة غير مسجلة: ' + code, 'error');
+    }
+};
+
+// Bottom Navigation Tab Switching
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.getAttribute('data-tab');
+        renderTab();
+    });
+});
+
+// Authentication
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+        await signInWithEmailAndPassword(auth, document.getElementById('email').value.trim(), document.getElementById('password').value);
+    } catch (err) {
+        document.getElementById('login-error').textContent = 'بيانات الدخول غير صحيحة';
+        document.getElementById('login-error').classList.remove('hide');
+    }
+});
+
+document.getElementById('btn-google').addEventListener('click', async () => {
+    try {
+        await signInWithPopup(auth, googleProvider);
+    } catch(err) {
+        console.error(err);
+        document.getElementById('login-error').textContent = 'فشل الدخول: ' + err.message;
+        document.getElementById('login-error').classList.remove('hide');
+    }
+});
+
+document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        currentUser = user;
+        const displayName = user.email === 'mohameadalhaear100@gmail.com' ? 'المدير العام' : (user.displayName || user.email.split('@')[0]);
+        document.getElementById('user-name').textContent = displayName;
+        document.getElementById('user-initial').textContent = displayName[0].toUpperCase();
+        document.getElementById('user-role').textContent = user.email === 'mohameadalhaear100@gmail.com' ? 'المدير العام (مشرف)' : 'فني صيانة';
+
+        elLogin.classList.add('hide');
+        elApp.classList.remove('hide');
+
+        // Render immediately
+        renderTab();
+
+        // Listeners
+        onValue(ref(db, 'assets'), snap => {
+            dbData.assets = snap.val() || {};
+        });
+
+        onValue(ref(db, 'workOrders'), snap => {
+            const data = snap.val() || {};
+            myTasks = Object.entries(data).map(([id, w]) => ({ id, ...w }));
+            renderTab();
+        });
+
+    } else {
+        currentUser = null;
+        elLogin.classList.remove('hide');
+        elApp.classList.add('hide');
+    }
+});
+</script>
+</body>
+</html>
+`;
+
+// Write employee.html
+fs.writeFileSync('employee.html', employeeHtmlContent, 'utf8');
+console.log('Clean employee.html written successfully!');

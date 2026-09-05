@@ -1,21 +1,22 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بوابة الموظف - CMMS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        background: '#F5F6F7',
+                        background: '#F4F5F7',
                         surface: '#FFFFFF',
                         primary: '#17202A',
                         secondary: '#667085',
-                        border: '#E4E7EC',
+                        border: '#E1E4E8',
                         action: '#2563EB',
                         success: '#16A34A',
                         warning: '#D97706',
@@ -27,104 +28,114 @@
         }
     </script>
     <style>
-        body { font-family: 'Cairo', sans-serif; }
+        body { font-family: 'Cairo', sans-serif; background-color: #F4F5F7; }
         .hide { display: none !important; }
+        .nav-btn.active { color: #2563EB; font-weight: bold; }
+        .nav-btn { color: #667085; }
         #toast-container > div { animation: slideIn 0.3s ease-out forwards; }
         @keyframes slideIn { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body class="bg-background text-primary h-screen flex flex-col overflow-hidden">
     
-    <div id="toast-container" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-2 w-11/12 max-w-md"></div>
+    <div id="toast-container" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] flex flex-col gap-2 w-full max-w-sm px-4"></div>
 
     <!-- Login -->
     <div id="login-view" class="h-full flex items-center justify-center p-4">
         <div class="bg-surface p-8 rounded-2xl shadow-xl w-full max-w-sm border border-border">
-            <h2 class="text-2xl font-bold text-center mb-6">بوابة الموظفين</h2>
-            <div id="login-error" class="hide bg-red-100 text-danger p-3 rounded-lg mb-4 text-sm text-center font-bold"></div>
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-action text-white font-extrabold text-xl mb-2 shadow">C</div>
+                <h2 class="text-xl font-extrabold text-primary">بوابة الموظفين والفنيين</h2>
+                <p class="text-xs text-secondary mt-1 font-bold">نظام CMMS الذكي</p>
+            </div>
+            
+            <div id="login-error" class="hide bg-red-50 border border-red-200 text-danger p-3 rounded-xl mb-4 text-xs text-center font-bold"></div>
+            
             <form id="login-form" class="space-y-4">
-                <input type="email" id="email" required placeholder="البريد الإلكتروني" class="w-full px-4 py-3 border border-border rounded-xl outline-none focus:border-action" dir="ltr">
-                <input type="password" id="password" required placeholder="كلمة المرور" class="w-full px-4 py-3 border border-border rounded-xl outline-none focus:border-action" dir="ltr">
-                <button type="submit" id="btn-login" class="w-full bg-action text-white font-bold py-3 rounded-xl hover:bg-blue-700 shadow-md">دخول</button>
+                <input type="email" id="email" required placeholder="البريد الإلكتروني" class="w-full px-4 py-2.5 border border-border rounded-xl text-xs outline-none focus:border-action" dir="ltr">
+                <input type="password" id="password" required placeholder="كلمة المرور" class="w-full px-4 py-2.5 border border-border rounded-xl text-xs outline-none focus:border-action" dir="ltr">
+                <button type="submit" class="w-full bg-action text-white font-bold py-2.5 rounded-xl text-xs hover:bg-blue-700 shadow-sm transition">دخول</button>
             </form>
-            <div class="mt-6 text-center text-sm text-secondary">أو</div>
-            <button id="btn-google" class="mt-4 w-full border border-border font-bold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50">
-                <svg class="w-5 h-5" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            
+            <div class="mt-5 flex items-center gap-3">
+                <div class="h-[1px] bg-border flex-1"></div>
+                <span class="text-xs text-secondary font-bold">أو</span>
+                <div class="h-[1px] bg-border flex-1"></div>
+            </div>
+            
+            <button id="btn-google" class="mt-4 w-full border border-border bg-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 hover:bg-gray-50 shadow-sm transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .5 4.1 1.5l3.1-3.1C17.3 1.6 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.8s.2-2.1.4-2.8L1.9 6.3C.7 8.7 0 10.8 0 12s.7 3.3 1.9 5.7l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.3-6.4-5.2L1.9 16c1.8 3.7 5.6 7 10.1 7z"/></svg>
                 الدخول عبر Google
             </button>
         </div>
     </div>
 
-    <!-- App -->
+    <!-- App View -->
     <div id="app-view" class="hide flex-col h-full bg-background">
-        <header class="bg-primary text-white p-4 flex justify-between items-center shadow-lg shrink-0 rounded-b-2xl mb-2 z-10">
+        
+        <!-- Header -->
+        <header class="bg-[#18212B] text-white p-4 flex justify-between items-center shadow-sm shrink-0 z-10">
             <div class="flex items-center gap-3">
-                <div id="user-initial" class="w-10 h-10 rounded-full bg-action flex items-center justify-center font-bold text-lg border-2 border-white/20">--</div>
+                <div id="user-initial" class="w-9 h-9 rounded-xl bg-action flex items-center justify-center font-extrabold text-sm text-white shadow">ا</div>
                 <div>
-                    <h1 id="user-name" class="font-bold text-sm">مرحباً</h1>
-                    <p id="user-role" class="text-xs text-gray-400">فني</p>
+                    <h1 id="user-name" class="font-extrabold text-xs">مرحباً بك</h1>
+                    <p id="user-role" class="text-[10px] text-gray-400">فني صيانة</p>
                 </div>
             </div>
-            <button id="btn-logout" class="p-2 text-gray-400 hover:text-white bg-white/10 rounded-full">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-            </button>
+            <div class="flex items-center gap-2">
+                <a href="admin.html" class="text-[10px] bg-white/10 hover:bg-white/20 text-white font-bold px-2.5 py-1.5 rounded-lg transition">الإدارة</a>
+                <button id="btn-logout" class="p-1.5 text-gray-400 hover:text-white bg-white/5 rounded-lg">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                </button>
+            </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto p-4 pb-20 relative" id="content"></main>
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto p-4 pb-24" id="content"></main>
 
-        
-
-
-
-
-
-
-
-<nav class="bg-surface border-t border-border flex justify-around p-3 shrink-0 fixed bottom-0 w-full z-20 pb-safe">
-    <button class="nav-btn flex flex-col items-center gap-1 w-16 text-action font-bold" data-tab="home">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-        <span class="text-[10px]">الرئيسية</span>
-    </button>
-    <button class="nav-btn flex flex-col items-center gap-1 w-16 text-secondary relative" data-tab="scan">
-        <div class="absolute -top-6 bg-action text-white p-3 rounded-full shadow-lg border-4 border-background">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-        </div>
-        <span class="text-[10px] mt-6">مسح QR</span>
-    </button>
-    <button class="nav-btn flex flex-col items-center gap-1 w-16 text-secondary" data-tab="tasks">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-        <span class="text-[10px]">مهامي</span>
-    </button>
-</nav>
-
-
-
-
-
-
-
-
+        <!-- Bottom Navigation -->
+        <nav class="bg-surface border-t border-border flex justify-around p-2.5 shrink-0 fixed bottom-0 w-full z-20 shadow-lg">
+            <button class="nav-btn active flex flex-col items-center gap-1 w-20 py-1" data-tab="home">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                <span class="text-[11px]">الرئيسية</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center gap-1 w-20 py-1" data-tab="scan">
+                <div class="bg-action text-white p-2.5 rounded-full shadow-md -mt-5 border-2 border-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                </div>
+                <span class="text-[11px]">مسح QR</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center gap-1 w-20 py-1" data-tab="tasks">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                <span class="text-[11px]">مهامي</span>
+            </button>
+        </nav>
     </div>
-    
-    
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getDatabase, ref, get, set, update, push, child, onValue, remove } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
-const firebaseConfig = { apiKey: "AIzaSyDtzonzkDsEvF9KNXi70j6ZTXG5kLAM_0c", authDomain: "cmms-37512.firebaseapp.com", databaseURL: "https://cmms-37512-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "cmms-37512", storageBucket: "cmms-37512.firebasestorage.app", messagingSenderId: "451592788539", appId: "1:451592788539:web:d3dc3e68b1543996b39a1e" };
+const firebaseConfig = { 
+    apiKey: "AIzaSyDtzonzkDsEvF9KNXi70j6ZTXG5kLAM_0c", 
+    authDomain: "cmms-37512.firebaseapp.com", 
+    databaseURL: "https://cmms-37512-default-rtdb.asia-southeast1.firebasedatabase.app", 
+    projectId: "cmms-37512", 
+    storageBucket: "cmms-37512.firebasestorage.app", 
+    messagingSenderId: "451592788539", 
+    appId: "1:451592788539:web:d3dc3e68b1543996b39a1e" 
+};
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 const googleProvider = new GoogleAuthProvider();
 
-
-
-const showToast = (msg, type = 'success') => {
+window.showToast = (msg, type = 'success') => {
     const c = document.getElementById('toast-container');
     const d = document.createElement('div');
-    d.className = `p-4 rounded-lg shadow-lg font-bold text-white flex items-center justify-between ${type === 'success' ? 'bg-success' : 'bg-danger'}`;
+    d.className = 'p-3 px-4 rounded-xl shadow-lg font-bold text-white text-xs flex items-center justify-between ' + (type === 'success' ? 'bg-success' : 'bg-danger');
     d.textContent = msg;
     c.appendChild(d);
     setTimeout(() => {
@@ -137,242 +148,221 @@ const showToast = (msg, type = 'success') => {
 const elLogin = document.getElementById('login-view');
 const elApp = document.getElementById('app-view');
 const elContent = document.getElementById('content');
+
 let currentUser = null;
+let currentProfile = null;
 let currentTab = 'home';
 let myTasks = [];
-let dbData = { assets: {} }; // Needed to show asset names
-
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    try { await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value); }
-    catch (err) { document.getElementById('login-error').classList.remove('hide'); document.getElementById('login-error').textContent = 'بيانات الدخول خاطئة'; }
-});
-document.getElementById('btn-google').addEventListener('click', () => signInWithPopup(auth, googleProvider));
-document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
-
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        currentUser = user;
-        elLogin.classList.add('hide');
-        elApp.classList.remove('hide');
-        
-        // Fetch Assets first for display names
-        onValue(ref(db, 'assets'), snap => { dbData.assets = snap.val() || {}; });
-
-        try {
-            const snap = await get(child(ref(db), 'users'));
-            let found = false;
-            if (snap.exists()) {
-                const data = snap.val();
-                for (let k in data) {
-                    if (data[k].email === user.email) {
-                        document.getElementById('user-name').textContent = data[k].name || user.email;
-                        document.getElementById('user-role').textContent = data[k].role === 'admin' ? 'إداري' : 'فني صيانة';
-                        document.getElementById('user-initial').textContent = (data[k].name ? data[k].name[0] : user.email[0]).toUpperCase();
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            if(!found) {
-                document.getElementById('user-name').textContent = user.email;
-                document.getElementById('user-initial').textContent = user.email[0].toUpperCase();
-            }
-        } catch(e) {
-            document.getElementById('user-name').textContent = user.email;
-            document.getElementById('user-initial').textContent = user.email[0].toUpperCase();
-        }
-
-        onValue(ref(db, 'workOrders'), (snap) => {
-            myTasks = [];
-            const data = snap.val();
-            for (let id in data) {
-                // In a real app we filter by assignedTo === user.uid. Here we show all to ensure data is visible.
-                myTasks.push({ id, ...data[id] });
-            }
-            // Sort: newest first
-            myTasks.sort((a,b) => (b.date||0) - (a.date||0));
-            if(window.renderTab) window.renderTab(); else renderTab();
-        });
-    } else {
-        elLogin.classList.remove('hide');
-        elApp.classList.add('hide');
-    }
-});
+let dbData = { assets: {}, workOrders: {} };
 
 window.updateStatus = async (id, status) => {
     try {
         await update(ref(db, 'workOrders/' + id), { status });
-        showToast('تم تحديث المهمة');
-    } catch(e) { showToast('خطأ', 'error'); }
+        showToast('تم تحديث المهمة إلى ' + status);
+    } catch(e) {
+        showToast('خطأ: ' + e.message, 'error');
+    }
 };
 
-const renderTab = () => {
+window.renderTab = () => {
     if (currentTab === 'home') {
+        const inProgressCount = myTasks.filter(t => t.status === 'In Progress' || t.status === 'قيد العمل').length;
+        const newCount = myTasks.filter(t => t.status === 'New' || t.status === 'جديد' || t.status === 'Assigned').length;
+
         elContent.innerHTML = `
-            <div class="mb-6">
-                <h2 class="text-xl font-bold mb-4">ملخص أعمالي</h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-surface p-5 rounded-2xl shadow-sm border border-border text-center">
-                        <div class="text-secondary text-xs font-bold mb-2">قيد التنفيذ</div>
-                        <div class="text-4xl font-extrabold text-action">${myTasks.filter(t=>t.status==='قيد التنفيذ').length}</div>
+            <div class="mb-5">
+                <div class="text-xs text-secondary font-bold mb-1">ملخص النشاط اليومي</div>
+                <h2 class="text-lg font-extrabold text-primary mb-3">مهام الصيانة الموكلة إليك</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-surface p-4 rounded-2xl border border-border text-center shadow-sm">
+                        <div class="text-secondary text-[11px] font-bold mb-1">قيد العمل</div>
+                        <div class="text-3xl font-extrabold text-action">${inProgressCount}</div>
                     </div>
-                    <div class="bg-surface p-5 rounded-2xl shadow-sm border border-border text-center">
-                        <div class="text-secondary text-xs font-bold mb-2">مهام جديدة</div>
-                        <div class="text-4xl font-extrabold text-warning">${myTasks.filter(t=>t.status==='جديد').length}</div>
+                    <div class="bg-surface p-4 rounded-2xl border border-border text-center shadow-sm">
+                        <div class="text-secondary text-[11px] font-bold mb-1">مهام جديدة</div>
+                        <div class="text-3xl font-extrabold text-primary">${newCount}</div>
                     </div>
                 </div>
             </div>
+
             <div>
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-lg">أحدث المهام المطلوبة</h3>
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-extrabold text-sm text-primary">أحدث أوامر العمل</h3>
+                    <button onclick="currentTab='tasks'; document.querySelectorAll('.nav-btn')[2].click();" class="text-action text-xs font-bold hover:underline">عرض الكل</button>
                 </div>
-                <div class="space-y-4">
-                    ${myTasks.filter(t=>t.status!=='مكتمل').slice(0,3).map(t => {
-                        const ast = t.assetId ? dbData.assets[t.assetId]?.name || '-' : '-';
+                <div class="space-y-3">
+                    ${myTasks.slice(0, 5).map(t => {
+                        const ast = t.assetId ? (dbData.assets[t.assetId]?.name || t.assetId) : 'ماكينة عامة';
                         return `
-                        <div class="bg-surface p-5 rounded-2xl shadow-sm border border-border flex flex-col gap-3">
+                        <div class="bg-surface p-4 rounded-2xl border border-border shadow-sm flex flex-col gap-2.5">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <div class="font-bold text-lg text-primary">${t.title}</div>
-                                    <div class="text-xs text-secondary mt-1 font-bold">الماكينة: ${ast}</div>
+                                    <div class="font-extrabold text-xs text-primary">${t.description || t.title || 'مهمة صيانة'}</div>
+                                    <div class="text-[11px] text-secondary font-bold mt-0.5">${ast}</div>
                                 </div>
-                                <span class="px-2 py-1 bg-yellow-100 text-warning rounded text-[10px] font-bold">${t.priority}</span>
+                                <span class="px-2 py-0.5 bg-blue-50 text-action border border-blue-200 rounded text-[10px] font-bold">${t.status || 'جديد'}</span>
                             </div>
-                            <div class="flex gap-2 mt-2 border-t border-border pt-3">
-                                ${t.status === 'جديد' ? `<button onclick="updateStatus('${t.id}', 'قيد التنفيذ')" class="flex-1 bg-action text-white py-2 rounded-xl text-sm font-bold shadow hover:bg-blue-700 transition">بدء العمل</button>` : ''}
-                                ${t.status === 'قيد التنفيذ' ? `<button onclick="updateStatus('${t.id}', 'مكتمل')" class="flex-1 bg-success text-white py-2 rounded-xl text-sm font-bold shadow hover:bg-green-700 transition">إنهاء العمل</button>` : ''}
+                            <div class="flex gap-2 pt-2 border-t border-border">
+                                <button onclick="updateStatus('${t.id}', 'In Progress')" class="flex-1 bg-action/10 hover:bg-action text-action hover:text-white py-1.5 rounded-xl text-xs font-bold transition">بدء العمل</button>
+                                <button onclick="updateStatus('${t.id}', 'Completed')" class="flex-1 bg-green-50 hover:bg-success text-success hover:text-white py-1.5 rounded-xl text-xs font-bold transition">إتمام</button>
                             </div>
-                        </div>
-                    `}).join('') || '<div class="text-secondary text-center p-8 font-bold border-2 border-dashed border-border rounded-xl">لا توجد مهام حالياً. أنت جاهز!</div>'}
+                        </div>`;
+                    }).join('') || '<div class="bg-surface p-8 rounded-2xl border border-border text-center text-secondary text-xs font-bold shadow-sm">لا توجد مهام موكلة حالياً ✅</div>'}
                 </div>
             </div>
         `;
-    } else if (currentTab === 'tasks') {
+    } else if (currentTab === 'scan') {
         elContent.innerHTML = `
-            <div class="mb-4">
-                <h2 class="text-xl font-bold mb-2">سجل المهام</h2>
-                <div class="relative w-full">
-                    <input type="text" placeholder="بحث في المهام..." class="w-full border border-border rounded-xl pl-3 pr-10 py-3 text-sm outline-none focus:border-action transition shadow-sm bg-surface">
-                    <svg class="w-5 h-5 text-gray-400 absolute right-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <div class="bg-surface p-5 rounded-2xl border border-border shadow-sm text-center">
+                <h3 class="font-extrabold text-base mb-1">مسح كود الماكينة (QR Code)</h3>
+                <p class="text-xs text-secondary mb-4">وجه الكاميرا نحو كود الماكينة لفتح بطاقتها فوراً</p>
+                <div id="qr-reader" class="w-full max-w-xs mx-auto rounded-xl overflow-hidden bg-black aspect-square flex items-center justify-center text-white text-xs">
+                    <span id="qr-status">جاري تشغيل الكاميرا...</span>
+                </div>
+                
+                <div class="mt-5 pt-4 border-t border-border">
+                    <p class="text-xs text-secondary font-bold mb-2">أو أدخل رمز الماكينة يدوياً:</p>
+                    <div class="flex gap-2 max-w-xs mx-auto">
+                        <input id="manual-code" type="text" placeholder="مثال: FM-01" class="border border-border rounded-xl px-3 py-2 text-xs flex-1 outline-none uppercase font-bold" dir="ltr">
+                        <button onclick="handleManualAsset(document.getElementById('manual-code').value)" class="bg-action text-white px-4 py-2 rounded-xl text-xs font-bold">بحث</button>
+                    </div>
                 </div>
             </div>
-            <div class="space-y-4">
+        `;
+
+        setTimeout(() => {
+            if (window.Html5Qrcode) {
+                try {
+                    const html5QrCode = new Html5Qrcode("qr-reader");
+                    html5QrCode.start(
+                        { facingMode: "environment" },
+                        { fps: 10, qrbox: { width: 220, height: 220 } },
+                        (decodedText) => {
+                            html5QrCode.stop().then(() => {
+                                handleManualAsset(decodedText.trim());
+                            });
+                        },
+                        () => {}
+                    ).catch(err => {
+                        const el = document.getElementById('qr-status');
+                        if (el) el.innerHTML = 'تعذر تشغيل الكاميرا.<br>يرجى استخدام البحث اليدوي بالأسفل.';
+                    });
+                } catch(e) {
+                    const el = document.getElementById('qr-status');
+                    if (el) el.textContent = 'استخدم البحث اليدوي بالأسفل.';
+                }
+            }
+        }, 300);
+
+    } else if (currentTab === 'tasks') {
+        elContent.innerHTML = `
+            <div class="mb-4 flex justify-between items-center">
+                <h2 class="font-extrabold text-base text-primary">جميع مهامي الموكلة</h2>
+                <span class="text-xs text-secondary font-bold">${myTasks.length} مهمة</span>
+            </div>
+            <div class="space-y-3">
                 ${myTasks.map(t => {
-                    const ast = t.assetId ? dbData.assets[t.assetId]?.name || '-' : '-';
+                    const ast = t.assetId ? (dbData.assets[t.assetId]?.name || t.assetId) : 'ماكينة عامة';
                     return `
-                    <div class="bg-surface p-4 rounded-2xl shadow-sm border border-border flex flex-col gap-2">
+                    <div class="bg-surface p-4 rounded-2xl border border-border shadow-sm flex flex-col gap-2.5">
                         <div class="flex justify-between items-start">
-                            <div><div class="font-bold text-primary">${t.title}</div><div class="text-xs text-secondary font-bold">الماكينة: ${ast}</div></div>
-                            <span class="px-2 py-1 bg-gray-100 border border-border text-primary rounded text-xs font-bold">${t.status}</span>
+                            <div>
+                                <div class="font-extrabold text-xs text-primary">${t.description || t.title}</div>
+                                <div class="text-[11px] text-secondary font-bold mt-0.5">${ast}</div>
+                            </div>
+                            <span class="px-2 py-0.5 bg-gray-100 border border-border rounded text-[10px] font-bold">${t.status || 'New'}</span>
                         </div>
-                    </div>
-                `}).join('') || '<div class="text-secondary text-center p-8 font-bold">لا توجد مهام سابقة</div>'}
+                        <div class="flex gap-2 pt-2 border-t border-border">
+                            <button onclick="updateStatus('${t.id}', 'In Progress')" class="flex-1 bg-action/10 hover:bg-action text-action hover:text-white py-1.5 rounded-xl text-xs font-bold transition">بدء العمل</button>
+                            <button onclick="updateStatus('${t.id}', 'Completed')" class="flex-1 bg-green-50 hover:bg-success text-success hover:text-white py-1.5 rounded-xl text-xs font-bold transition">إتمام</button>
+                        </div>
+                    </div>`;
+                }).join('') || '<div class="bg-surface p-10 rounded-2xl border border-border text-center text-secondary text-xs font-bold shadow-sm">لا توجد أي مهام مسجلة لديك ✅</div>'}
             </div>
         `;
     }
 };
 
+window.handleManualAsset = (code) => {
+    if (!code) return;
+    const cleanCode = code.trim().toLowerCase();
+    const foundEntry = Object.entries(dbData.assets || {}).find(([id, a]) => {
+        return id.toLowerCase() === cleanCode || (a.code && a.code.toLowerCase() === cleanCode);
+    });
+    
+    if (foundEntry) {
+        const [id, a] = foundEntry;
+        showToast('تم العثور على: ' + a.name);
+        alert('بطاقة الماكينة:\n\nالاسم: ' + a.name + '\nالرمز: ' + (a.code || id) + '\nالقسم: ' + (a.department || '-') + '\nالحالة: ' + (a.status === 'active' ? 'تعمل' : 'متوقفة'));
+    } else {
+        showToast('الماكينة غير مسجلة: ' + code, 'error');
+    }
+};
+
+// Bottom Navigation Tab Switching
 document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-        document.querySelectorAll('.nav-btn').forEach(b => { 
-            b.classList.remove('text-action', 'font-bold'); 
-            b.classList.add('text-secondary'); 
-        });
-        btn.classList.remove('text-secondary'); 
-        btn.classList.add('text-action', 'font-bold');
-        currentTab = btn.dataset.tab;
-        if(window.renderTab) window.renderTab(); else renderTab();
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.getAttribute('data-tab');
+        renderTab();
     });
 });
 
-
-
-// --- PHASE 2: EMPLOYEE QR SCANNER & BOTTOM NAV ---
-
-const origRenderTab = renderTab;
-
-window.renderTab = () => {
-    if (currentTab === 'scan') {
-        elContent.innerHTML = `
-            <div class="flex flex-col h-full bg-black text-white rounded-2xl overflow-hidden shadow-xl relative">
-                <div class="p-4 bg-gray-900 flex justify-between items-center z-10 absolute top-0 w-full">
-                    <h2 class="font-bold">مسح كود الماكينة (QR)</h2>
-                    <button onclick="document.querySelector('[data-tab=\\'home\\']').click()" class="text-white bg-gray-800 p-2 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-                </div>
-                <div id="qr-reader" class="flex-1 w-full bg-black flex items-center justify-center"></div>
-            </div>
-        `;
-        
-        setTimeout(() => {
-            if (window.Html5Qrcode) {
-                const html5QrCode = new Html5Qrcode("qr-reader");
-                html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 250 } },
-                (decodedText, decodedResult) => {
-                    html5QrCode.stop().then(() => {
-                        const assetId = decodedText.trim();
-                        if (dbData.assets && dbData.assets[assetId]) {
-                            showToast('تم التعرف على الماكينة');
-                            showAssetActionSheet(assetId);
-                        } else {
-                            showToast('الماكينة غير مسجلة: ' + assetId, 'error');
-                            document.querySelector('[data-tab="home"]').click();
-                        }
-                    });
-                },
-                (errorMessage) => { })
-                .catch((err) => {
-                    document.getElementById('qr-reader').innerHTML = '<div class="text-center p-8 text-red-500 font-bold">لا يمكن الوصول للكاميرا</div>';
-                });
-            }
-        }, 300);
-    } else {
-        origRenderTab();
+// Authentication
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+        await signInWithEmailAndPassword(auth, document.getElementById('email').value.trim(), document.getElementById('password').value);
+    } catch (err) {
+        document.getElementById('login-error').textContent = 'بيانات الدخول غير صحيحة';
+        document.getElementById('login-error').classList.remove('hide');
     }
-};
+});
 
-window.showAssetActionSheet = (assetId) => {
-    const a = dbData.assets[assetId];
-    if (!a) return;
-    
-    const sheet = document.createElement('div');
-    sheet.className = "fixed inset-0 bg-black/60 z-[100] flex flex-col justify-end transition-opacity duration-300";
-    sheet.innerHTML = `
-        <div class="bg-surface rounded-t-3xl w-full p-6 animate-[slideIn_0.3s_ease-out]">
-            <div class="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-6"></div>
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h3 class="font-bold text-xl text-primary">${a.name}</h3>
-                    <p class="text-xs text-secondary font-bold mt-1" dir="ltr">${a.code || assetId}</p>
-                </div>
-                ${a.status === 'active' ? '<span class="bg-green-100 text-success px-3 py-1 rounded-full text-xs font-bold border border-green-200">تعمل</span>' : '<span class="bg-red-100 text-danger px-3 py-1 rounded-full text-xs font-bold border border-red-200">متوقفة</span>'}
-            </div>
-            
-            <div class="grid grid-cols-2 gap-3 mb-6">
-                <button onclick="document.getElementById('temp-sheet').remove(); showToast('جاري التطوير (المرحلة 3)')" class="bg-red-50 text-danger border border-red-100 p-4 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-red-100 transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    <span class="font-bold text-sm">إبلاغ عن عطل</span>
-                </button>
-                <button onclick="document.getElementById('temp-sheet').remove(); showToast('جاري التطوير (المرحلة 3)')" class="bg-blue-50 text-action border border-blue-100 p-4 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-blue-100 transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                    <span class="font-bold text-sm">سجل الأعمال</span>
-                </button>
-            </div>
-            
-            <button onclick="document.getElementById('temp-sheet').remove(); document.querySelector('[data-tab=\\'home\\']').click()" class="w-full bg-gray-100 text-secondary font-bold py-3.5 rounded-xl hover:bg-gray-200 transition">إلغاء</button>
-        </div>
-    `;
-    sheet.id = "temp-sheet";
-    document.body.appendChild(sheet);
-};
+document.getElementById('btn-google').addEventListener('click', async () => {
+    try {
+        await signInWithPopup(auth, googleProvider);
+    } catch(err) {
+        console.error(err);
+        document.getElementById('login-error').textContent = 'فشل الدخول: ' + err.message;
+        document.getElementById('login-error').classList.remove('hide');
+    }
+});
 
+document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        currentUser = user;
+        const displayName = user.email === 'mohameadalhaear100@gmail.com' ? 'المدير العام' : (user.displayName || user.email.split('@')[0]);
+        document.getElementById('user-name').textContent = displayName;
+        document.getElementById('user-initial').textContent = displayName[0].toUpperCase();
+        document.getElementById('user-role').textContent = user.email === 'mohameadalhaear100@gmail.com' ? 'المدير العام (مشرف)' : 'فني صيانة';
 
-﻿
+        elLogin.classList.add('hide');
+        elApp.classList.remove('hide');
 
+        // Render immediately
+        renderTab();
 
-﻿
+        // Listeners
+        onValue(ref(db, 'assets'), snap => {
+            dbData.assets = snap.val() || {};
+        });
+
+        onValue(ref(db, 'workOrders'), snap => {
+            const data = snap.val() || {};
+            myTasks = Object.entries(data).map(([id, w]) => ({ id, ...w }));
+            renderTab();
+        });
+
+    } else {
+        currentUser = null;
+        elLogin.classList.remove('hide');
+        elApp.classList.add('hide');
+    }
+});
 </script>
 </body>
 </html>
-
