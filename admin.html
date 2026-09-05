@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise CMMS - Ø§Ù„Ø¥Ø¯Ø§Ø±Ø©</title>
+    <title>Enterprise CMMS - الإدارة</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -46,14 +46,14 @@
     <!-- Login -->
     <div id="login-view" class="absolute inset-0 bg-background flex items-center justify-center z-50">
         <div class="bg-surface p-8 rounded-xl shadow-lg w-full max-w-md border border-border">
-            <h1 class="text-2xl font-bold text-center mb-6">ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„</h1>
+            <h1 class="text-2xl font-bold text-center mb-6">تسجيل الدخول</h1>
             <div id="login-error" class="hide bg-red-100 text-danger p-3 rounded mb-4 text-sm text-center font-bold"></div>
             <form id="login-form" class="space-y-4">
-                <input type="email" id="email" required placeholder="Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ" class="w-full border border-border rounded-lg p-3 outline-none focus:border-action" dir="ltr">
-                <input type="password" id="password" required placeholder="ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±" class="w-full border border-border rounded-lg p-3 outline-none focus:border-action" dir="ltr">
-                <button type="submit" id="btn-login" class="w-full bg-action text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">Ø¯Ø®ÙˆÙ„</button>
+                <input type="email" id="email" required placeholder="البريد الإلكتروني" class="w-full border border-border rounded-lg p-3 outline-none focus:border-action" dir="ltr">
+                <input type="password" id="password" required placeholder="كلمة المرور" class="w-full border border-border rounded-lg p-3 outline-none focus:border-action" dir="ltr">
+                <button type="submit" id="btn-login" class="w-full bg-action text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">دخول</button>
             </form>
-            <div class="mt-4 text-center text-sm text-secondary">Ø£Ùˆ</div>
+            <div class="mt-4 text-center text-sm text-secondary">أو</div>
             <button id="btn-google" class="mt-4 w-full border border-border font-bold py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50 transition">
                 <svg class="w-5 h-5" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
                 Google
@@ -83,12 +83,12 @@
         <main class="flex-1 flex flex-col h-full overflow-hidden bg-background">
             <header class="h-16 bg-surface border-b border-border flex justify-between items-center px-6 shrink-0 shadow-sm">
                 <div class="flex items-center gap-4">
-                    <h2 id="page-title" class="font-bold text-lg text-primary">Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©</h2>
+                    <h2 id="page-title" class="font-bold text-lg text-primary">الرئيسية</h2>
                 </div>
                 <div class="flex items-center gap-4">
                     <button id="btn-logout" class="text-sm font-bold text-secondary hover:text-danger flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                        Ø®Ø±ÙˆØ¬
+                        خروج
                     </button>
                 </div>
             </header>
@@ -108,22 +108,24 @@
             </div>
             <div id="modal-body" class="p-6 overflow-y-auto flex-1 text-sm text-primary"></div>
             <div class="p-5 border-t border-border flex justify-end gap-3 bg-gray-50/50 rounded-b-xl">
-                <button onclick="document.getElementById('modal-container').classList.add('hide')" class="px-5 py-2.5 bg-white border border-border rounded-lg text-sm font-bold text-secondary hover:bg-gray-50 transition">Ø¥Ù„ØºØ§Ø¡</button>
-                <button id="modal-save" class="px-5 py-2.5 bg-action text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition shadow-sm">Ø­ÙØ¸</button>
+                <button onclick="document.getElementById('modal-container').classList.add('hide')" class="px-5 py-2.5 bg-white border border-border rounded-lg text-sm font-bold text-secondary hover:bg-gray-50 transition">إلغاء</button>
+                <button id="modal-save" class="px-5 py-2.5 bg-action text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition shadow-sm">حفظ</button>
             </div>
         </div>
     </div>
 
-    <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js';
-import { getDatabase, ref, get, set, update, push, child, onValue, remove } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js';
+    
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getDatabase, ref, get, set, update, push, child, onValue, remove } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
 
-const firebaseConfig = { apiKey: 'AIzaSyDtzonzkDsEvF9KNXi70j6ZTXG5kLAM_0c', authDomain: 'cmms-37512.firebaseapp.com', databaseURL: 'https://cmms-37512-default-rtdb.firebaseio.com', projectId: 'cmms-37512', storageBucket: 'cmms-37512.firebasestorage.app', messagingSenderId: '451592788539', appId: '1:451592788539:web:d3dc3e68b1543996b39a1e' };
+const firebaseConfig = { apiKey: "AIzaSyDtzonzkDsEvF9KNXi70j6ZTXG5kLAM_0c", authDomain: "cmms-37512.firebaseapp.com", databaseURL: "https://cmms-37512-default-rtdb.firebaseio.com", projectId: "cmms-37512", storageBucket: "cmms-37512.firebasestorage.app", messagingSenderId: "451592788539", appId: "1:451592788539:web:d3dc3e68b1543996b39a1e" };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 const googleProvider = new GoogleAuthProvider();
+
 
 
 // --- UI Utilities ---
@@ -153,14 +155,14 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     try {
         await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
     } catch (err) {
-        document.getElementById('login-error').textContent = 'Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø¯Ø®ÙˆÙ„ ØºÙŠØ± ØµØ­ÙŠØ­Ø©';
+        document.getElementById('login-error').textContent = 'بيانات الدخول غير صحيحة';
         document.getElementById('login-error').classList.remove('hide');
     }
 });
 
 document.getElementById('btn-google').addEventListener('click', async () => {
     try { await signInWithPopup(auth, googleProvider); }
-    catch (err) { document.getElementById('login-error').textContent = 'ÙØ´Ù„ Ø§Ù„Ø¯Ø®ÙˆÙ„'; document.getElementById('login-error').classList.remove('hide'); }
+    catch (err) { document.getElementById('login-error').textContent = 'فشل الدخول'; document.getElementById('login-error').classList.remove('hide'); }
 });
 
 document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
@@ -180,7 +182,7 @@ onAuthStateChanged(auth, async (user) => {
                 renderPage(currentHash);
             }, (err) => {
                 console.error("Firebase read error on " + path, err);
-                if (path === 'users') showToast('Ø­Ø¯Ø« Ø®Ø·Ø£ ÙÙŠ ØµÙ„Ø§Ø­ÙŠØ§Øª Ø§Ù„Ù‚Ø±Ø§Ø¡Ø©. Ø§Ù„Ø±Ø¬Ø§Ø¡ ØªØ­Ø¯ÙŠØ« Ù‚ÙˆØ§Ø¹Ø¯ Ø¨ÙŠØ§Ù†Ø§Øª Firebase.', 'error');
+                if (path === 'users') showToast('حدث خطأ في صلاحيات القراءة. الرجاء تحديث قواعد بيانات Firebase.', 'error');
             });
         });
 
@@ -190,7 +192,7 @@ onAuthStateChanged(auth, async (user) => {
                 const superRef = ref(db, 'users/' + user.uid);
                 onValue(superRef, (snap) => {
                     if (!snap.exists()) {
-                        set(superRef, { email: user.email, name: 'Ø§Ù„Ù…Ø¯ÙŠØ± Ø§Ù„Ø¹Ø§Ù…', role: 'super_admin', isSuperAdmin: true, status: 'active' }).catch(()=>{});
+                        set(superRef, { email: user.email, name: 'المدير العام', role: 'super_admin', isSuperAdmin: true, status: 'active' }).catch(()=>{});
                     }
                 }, { onlyOnce: true });
             }
@@ -203,13 +205,13 @@ onAuthStateChanged(auth, async (user) => {
 
 // --- Routing & Navigation ---
 const navs = [
-    { id: 'dashboard', label: 'Ù„ÙˆØ­Ø© Ø§Ù„ØªØ­ÙƒÙ…', section: 'Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©' },
-    { id: 'assets', label: 'Ø§Ù„Ù…ÙƒØ§Ø¦Ù† ÙˆØ§Ù„Ø£ØµÙˆÙ„', section: 'Ø§Ù„ØµÙŠØ§Ù†Ø©' },
-    { id: 'workorders', label: 'Ø£ÙˆØ§Ù…Ø± Ø§Ù„Ø¹Ù…Ù„', section: 'Ø§Ù„ØµÙŠØ§Ù†Ø©' },
-    { id: 'breakdowns', label: 'Ø§Ù„Ø£Ø¹Ø·Ø§Ù„', section: 'Ø§Ù„ØµÙŠØ§Ù†Ø©' },
-    { id: 'inventory', label: 'Ù‚Ø·Ø¹ Ø§Ù„ØºÙŠØ§Ø±', section: 'Ø§Ù„Ù…Ø®Ø²ÙˆÙ†' },
-    { id: 'employees', label: 'Ø§Ù„Ù…ÙˆØ¸ÙÙˆÙ†', section: 'Ø§Ù„Ø¥Ø¯Ø§Ø±Ø©' },
-    { id: 'audit', label: 'Ø³Ø¬Ù„ Ø§Ù„Ù†Ø¸Ø§Ù…', section: 'Ø§Ù„Ù†Ø¸Ø§Ù…' }
+    { id: 'dashboard', label: 'لوحة التحكم', section: 'الرئيسية' },
+    { id: 'assets', label: 'المكائن والأصول', section: 'الصيانة' },
+    { id: 'workorders', label: 'أوامر العمل', section: 'الصيانة' },
+    { id: 'breakdowns', label: 'الأعطال', section: 'الصيانة' },
+    { id: 'inventory', label: 'قطع الغيار', section: 'المخزون' },
+    { id: 'employees', label: 'الموظفون', section: 'الإدارة' },
+    { id: 'audit', label: 'سجل النظام', section: 'النظام' }
 ];
 
 const renderSidebar = () => {
@@ -229,7 +231,7 @@ const renderPage = (hash) => {
     currentHash = hash || '#dashboard';
     renderSidebar();
     const p = navs.find(n => '#' + n.id === currentHash);
-    document.getElementById('page-title').textContent = p ? p.label : 'Ù„ÙˆØ­Ø© Ø§Ù„ØªØ­ÙƒÙ…';
+    document.getElementById('page-title').textContent = p ? p.label : 'لوحة التحكم';
     
     switch(currentHash) {
         case '#dashboard': renderDashboard(); break;
@@ -252,13 +254,13 @@ window.openModal = (title, bodyHtml, onSave) => {
     document.getElementById('modal-container').classList.remove('hide');
     document.getElementById('modal-save').onclick = async () => {
         const btn = document.getElementById('modal-save');
-        btn.disabled = true; btn.textContent = 'Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø­ÙØ¸...';
+        btn.disabled = true; btn.textContent = 'جاري الحفظ...';
         try {
             if (await onSave()) document.getElementById('modal-container').classList.add('hide');
         } catch(e) {
-            showToast(e.message || 'Ø®Ø·Ø£ ÙÙŠ Ø§Ù„Ø­ÙØ¸', 'error');
+            showToast(e.message || 'خطأ في الحفظ', 'error');
         } finally {
-            btn.disabled = false; btn.textContent = 'Ø­ÙØ¸';
+            btn.disabled = false; btn.textContent = 'حفظ';
         }
     };
 };
@@ -267,7 +269,7 @@ window.openModal = (title, bodyHtml, onSave) => {
 const createTable = (headers, rows, addFn, addLabel) => `
     <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div class="relative w-full sm:w-80">
-            <input type="text" placeholder="Ø¨Ø­Ø«..." class="w-full border border-border rounded-lg pl-3 pr-10 py-2.5 text-sm outline-none focus:border-action transition shadow-sm">
+            <input type="text" placeholder="بحث..." class="w-full border border-border rounded-lg pl-3 pr-10 py-2.5 text-sm outline-none focus:border-action transition shadow-sm">
             <svg class="w-5 h-5 text-gray-400 absolute right-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </div>
         ${addFn ? `<button onclick="${addFn}" class="bg-action text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-blue-700 transition shadow-sm whitespace-nowrap flex gap-2 items-center"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>${addLabel}</button>` : ''}
@@ -279,12 +281,12 @@ const createTable = (headers, rows, addFn, addLabel) => `
                     <tr>${headers.map(h => `<th class="p-4 font-bold whitespace-nowrap">${h}</th>`).join('')}</tr>
                 </thead>
                 <tbody class="divide-y divide-border">
-                    ${rows.length ? rows.join('') : `<tr><td colspan="${headers.length}" class="p-12 text-center text-secondary font-bold text-base">Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¨ÙŠØ§Ù†Ø§Øª Ù„Ù„Ø¹Ø±Ø¶</td></tr>`}
+                    ${rows.length ? rows.join('') : `<tr><td colspan="${headers.length}" class="p-12 text-center text-secondary font-bold text-base">لا توجد بيانات للعرض</td></tr>`}
                 </tbody>
             </table>
         </div>
         <div class="p-4 border-t border-border bg-gray-50/50 flex justify-between items-center text-xs text-secondary font-bold">
-            <div>Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø³Ø¬Ù„Ø§Øª: ${rows.length}</div>
+            <div>إجمالي السجلات: ${rows.length}</div>
         </div>
     </div>
 `;
@@ -299,36 +301,36 @@ const renderDashboard = () => {
     elContent.innerHTML = `
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div class="bg-surface p-6 rounded-xl border border-border shadow-sm flex items-center justify-between">
-                <div><div class="text-secondary text-sm font-bold mb-1">Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ù…ÙƒØ§Ø¦Ù†</div><div class="text-3xl font-extrabold text-primary">${assets.length}</div></div>
+                <div><div class="text-secondary text-sm font-bold mb-1">إجمالي المكائن</div><div class="text-3xl font-extrabold text-primary">${assets.length}</div></div>
                 <div class="w-12 h-12 bg-blue-50 text-action rounded-full flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg></div>
             </div>
             <div class="bg-surface p-6 rounded-xl border border-border shadow-sm flex items-center justify-between">
-                <div><div class="text-secondary text-sm font-bold mb-1">Ø¹Ø§Ù…Ù„Ø© / Ù…ØªÙˆÙ‚ÙØ©</div><div class="text-3xl font-extrabold text-success">${assets.filter(a=>a.status==='active').length} <span class="text-lg text-gray-300">/</span> <span class="text-danger">${assets.filter(a=>a.status==='stopped').length}</span></div></div>
+                <div><div class="text-secondary text-sm font-bold mb-1">عاملة / متوقفة</div><div class="text-3xl font-extrabold text-success">${assets.filter(a=>a.status==='active').length} <span class="text-lg text-gray-300">/</span> <span class="text-danger">${assets.filter(a=>a.status==='stopped').length}</span></div></div>
                 <div class="w-12 h-12 bg-green-50 text-success rounded-full flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
             </div>
             <div class="bg-surface p-6 rounded-xl border border-border shadow-sm flex items-center justify-between">
-                <div><div class="text-secondary text-sm font-bold mb-1">Ø£ÙˆØ§Ù…Ø± Ù…ÙØªÙˆØ­Ø©</div><div class="text-3xl font-extrabold text-warning">${wos.filter(w=>w.status!=='Ù…ÙƒØªÙ…Ù„').length}</div></div>
+                <div><div class="text-secondary text-sm font-bold mb-1">أوامر مفتوحة</div><div class="text-3xl font-extrabold text-warning">${wos.filter(w=>w.status!=='مكتمل').length}</div></div>
                 <div class="w-12 h-12 bg-yellow-50 text-warning rounded-full flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg></div>
             </div>
             <div class="bg-surface p-6 rounded-xl border border-border shadow-sm flex items-center justify-between">
-                <div><div class="text-secondary text-sm font-bold mb-1">Ø¨Ù„Ø§ØºØ§Øª Ø§Ù„Ø£Ø¹Ø·Ø§Ù„</div><div class="text-3xl font-extrabold text-danger">${Object.values(dbData.breakdowns).length}</div></div>
+                <div><div class="text-secondary text-sm font-bold mb-1">بلاغات الأعطال</div><div class="text-3xl font-extrabold text-danger">${Object.values(dbData.breakdowns).length}</div></div>
                 <div class="w-12 h-12 bg-red-50 text-danger rounded-full flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg></div>
             </div>
         </div>
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="bg-surface rounded-xl border border-border shadow-sm overflow-hidden flex flex-col">
-                <div class="p-5 border-b border-border flex justify-between items-center"><h3 class="font-bold text-lg">Ø£Ø­Ø¯Ø« Ø£ÙˆØ§Ù…Ø± Ø§Ù„Ø¹Ù…Ù„</h3><a href="#workorders" class="text-action text-sm font-bold hover:underline">Ø¹Ø±Ø¶ Ø§Ù„ÙƒÙ„</a></div>
+                <div class="p-5 border-b border-border flex justify-between items-center"><h3 class="font-bold text-lg">أحدث أوامر العمل</h3><a href="#workorders" class="text-action text-sm font-bold hover:underline">عرض الكل</a></div>
                 <div class="flex-1 overflow-x-auto p-0">
                     <table class="w-full text-sm text-right">
-                        <tbody>${wos.slice(-5).map(w=>`<tr class="border-b border-border/50 hover:bg-gray-50"><td class="p-4 font-bold text-primary">${w.title}</td><td class="p-4"><span class="px-2 py-1 bg-gray-100 rounded text-xs font-bold">${w.status}</span></td></tr>`).join('') || '<tr><td colspan="2" class="p-8 text-center text-secondary">Ù„Ø§ ØªÙˆØ¬Ø¯ Ø£ÙˆØ§Ù…Ø±</td></tr>'}</tbody>
+                        <tbody>${wos.slice(-5).map(w=>`<tr class="border-b border-border/50 hover:bg-gray-50"><td class="p-4 font-bold text-primary">${w.title}</td><td class="p-4"><span class="px-2 py-1 bg-gray-100 rounded text-xs font-bold">${w.status}</span></td></tr>`).join('') || '<tr><td colspan="2" class="p-8 text-center text-secondary">لا توجد أوامر</td></tr>'}</tbody>
                     </table>
                 </div>
             </div>
             <div class="bg-surface rounded-xl border border-border shadow-sm overflow-hidden flex flex-col">
-                <div class="p-5 border-b border-border flex justify-between items-center"><h3 class="font-bold text-lg">Ù†Ø¸Ø±Ø© Ø¹Ø§Ù…Ø© Ø¹Ù„Ù‰ Ø§Ù„Ø®Ø·ÙˆØ·</h3></div>
+                <div class="p-5 border-b border-border flex justify-between items-center"><h3 class="font-bold text-lg">نظرة عامة على الخطوط</h3></div>
                 <div class="p-6 flex-1 flex items-center justify-center text-secondary font-bold">
-                    Ø³ÙŠØªÙ… Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ù…Ø®Ø·Ø·Ø§Øª Ø§Ù„Ø¨ÙŠØ§Ù†ÙŠØ© (Charts) Ù‡Ù†Ø§
+                    سيتم إضافة المخططات البيانية (Charts) هنا
                 </div>
             </div>
         </div>
@@ -337,20 +339,20 @@ const renderDashboard = () => {
 
 // Assets
 window.openAddAsset = () => {
-    openModal("Ø¥Ø¶Ø§ÙØ© Ù…Ø§ÙƒÙŠÙ†Ø©", `
+    openModal("إضافة ماكينة", `
         <div class="space-y-4">
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø§Ø³Ù… <span class="text-danger">*</span></label><input id="a-name" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
-            <div><label class="block text-sm font-bold mb-2">Ø±Ù‚Ù… Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø© (ID)</label><input id="a-code" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none" dir="ltr"></div>
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ù‚Ø³Ù… / Ø®Ø· Ø§Ù„Ø¥Ù†ØªØ§Ø¬</label><input id="a-dep" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø­Ø§Ù„Ø©</label>
-                <select id="a-status" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option value="active">Ø¹Ø§Ù…Ù„Ø©</option><option value="stopped">Ù…ØªÙˆÙ‚ÙØ©</option></select>
+            <div><label class="block text-sm font-bold mb-2">الاسم <span class="text-danger">*</span></label><input id="a-name" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
+            <div><label class="block text-sm font-bold mb-2">رقم الماكينة (ID)</label><input id="a-code" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none" dir="ltr"></div>
+            <div><label class="block text-sm font-bold mb-2">القسم / خط الإنتاج</label><input id="a-dep" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
+            <div><label class="block text-sm font-bold mb-2">الحالة</label>
+                <select id="a-status" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option value="active">عاملة</option><option value="stopped">متوقفة</option></select>
             </div>
         </div>
     `, async () => {
         const name = document.getElementById('a-name').value;
-        if (!name) throw new Error('Ø§Ù„Ø§Ø³Ù… Ù…Ø·Ù„ÙˆØ¨');
+        if (!name) throw new Error('الاسم مطلوب');
         await push(ref(db, 'assets'), { name, code: document.getElementById('a-code').value, department: document.getElementById('a-dep').value, status: document.getElementById('a-status').value });
-        showToast('ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¨Ù†Ø¬Ø§Ø­'); return true;
+        showToast('تمت الإضافة بنجاح'); return true;
     });
 };
 const renderAssets = () => {
@@ -359,31 +361,31 @@ const renderAssets = () => {
             <td class="p-4 font-bold text-primary">${a.name}</td>
             <td class="p-4" dir="ltr">${a.code||'-'}</td>
             <td class="p-4">${a.department||'-'}</td>
-            <td class="p-4">${a.status==='active'?'<span class="inline-flex px-2 py-1 bg-green-100 text-success rounded text-xs font-bold">Ø¹Ø§Ù…Ù„Ø©</span>':'<span class="inline-flex px-2 py-1 bg-red-100 text-danger rounded text-xs font-bold">Ù…ØªÙˆÙ‚ÙØ©</span>'}</td>
+            <td class="p-4">${a.status==='active'?'<span class="inline-flex px-2 py-1 bg-green-100 text-success rounded text-xs font-bold">عاملة</span>':'<span class="inline-flex px-2 py-1 bg-red-100 text-danger rounded text-xs font-bold">متوقفة</span>'}</td>
         </tr>
     `);
-    elContent.innerHTML = createTable(['Ø§Ø³Ù… Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©', 'Ø§Ù„Ø±Ù‚Ù…', 'Ø§Ù„Ù‚Ø³Ù…', 'Ø§Ù„Ø­Ø§Ù„Ø©'], rows, 'openAddAsset()', 'Ø¥Ø¶Ø§ÙØ© Ù…Ø§ÙƒÙŠÙ†Ø©');
+    elContent.innerHTML = createTable(['اسم الماكينة', 'الرقم', 'القسم', 'الحالة'], rows, 'openAddAsset()', 'إضافة ماكينة');
 };
 
 // Work Orders
 window.openAddWO = () => {
     const as = Object.entries(dbData.assets).map(([id, a]) => `<option value="${id}">${a.name}</option>`).join('');
     const us = Object.entries(dbData.users).map(([id, u]) => `<option value="${id}">${u.name}</option>`).join('');
-    openModal("Ø¥Ø¶Ø§ÙØ© Ø£Ù…Ø± Ø¹Ù…Ù„", `
+    openModal("إضافة أمر عمل", `
         <div class="space-y-4">
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø¹Ù†ÙˆØ§Ù† <span class="text-danger">*</span></label><input id="wo-title" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©</label><select id="wo-asset" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option value="">-- Ø§Ø®ØªØ± --</option>${as}</select></div>
-            <div><label class="block text-sm font-bold mb-2">Ø¥Ø³Ù†Ø§Ø¯ Ø¥Ù„Ù‰</label><select id="wo-user" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option value="">-- Ø§Ø®ØªØ± --</option>${us}</select></div>
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø£ÙˆÙ„ÙˆÙŠØ©</label><select id="wo-pri" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option>Ø¹Ø§Ø¯ÙŠ</option><option>Ø¹Ø§Ù„ÙŠ</option><option>Ø­Ø±Ø¬</option></select></div>
+            <div><label class="block text-sm font-bold mb-2">العنوان <span class="text-danger">*</span></label><input id="wo-title" type="text" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"></div>
+            <div><label class="block text-sm font-bold mb-2">الماكينة</label><select id="wo-asset" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option value="">-- اختر --</option>${as}</select></div>
+            <div><label class="block text-sm font-bold mb-2">إسناد إلى</label><select id="wo-user" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option value="">-- اختر --</option>${us}</select></div>
+            <div><label class="block text-sm font-bold mb-2">الأولوية</label><select id="wo-pri" class="w-full border border-border p-2.5 rounded-lg focus:border-action outline-none"><option>عادي</option><option>عالي</option><option>حرج</option></select></div>
         </div>
     `, async () => {
         const title = document.getElementById('wo-title').value;
-        if (!title) throw new Error('Ø§Ù„Ø¹Ù†ÙˆØ§Ù† Ù…Ø·Ù„ÙˆØ¨');
-        await push(ref(db, 'workOrders'), { title, assetId: document.getElementById('wo-asset').value, assignedTo: document.getElementById('wo-user').value, priority: document.getElementById('wo-pri').value, status: 'Ø¬Ø¯ÙŠØ¯', date: Date.now() });
-        showToast('ØªÙ… Ø­ÙØ¸ Ø£Ù…Ø± Ø§Ù„Ø¹Ù…Ù„'); return true;
+        if (!title) throw new Error('العنوان مطلوب');
+        await push(ref(db, 'workOrders'), { title, assetId: document.getElementById('wo-asset').value, assignedTo: document.getElementById('wo-user').value, priority: document.getElementById('wo-pri').value, status: 'جديد', date: Date.now() });
+        showToast('تم حفظ أمر العمل'); return true;
     });
 };
-window.updateWOStatus = async (id, status) => { await update(ref(db, 'workOrders/'+id), {status}); showToast('ØªÙ… ØªØ­Ø¯ÙŠØ« Ø§Ù„Ø­Ø§Ù„Ø©'); };
+window.updateWOStatus = async (id, status) => { await update(ref(db, 'workOrders/'+id), {status}); showToast('تم تحديث الحالة'); };
 const renderWorkOrders = () => {
     const rows = Object.entries(dbData.workOrders).map(([id, w]) => {
         const ast = w.assetId ? dbData.assets[w.assetId]?.name || '-' : '-';
@@ -396,29 +398,29 @@ const renderWorkOrders = () => {
             <td class="p-4"><span class="px-2 py-1 bg-gray-100 rounded text-xs font-bold border border-border">${w.priority}</span></td>
             <td class="p-4">
                 <select onchange="updateWOStatus('${id}', this.value)" class="border border-border p-1.5 rounded bg-white text-xs font-bold outline-none cursor-pointer hover:border-gray-400">
-                    <option ${w.status==='Ø¬Ø¯ÙŠØ¯'?'selected':''}>Ø¬Ø¯ÙŠØ¯</option>
-                    <option ${w.status==='Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°'?'selected':''}>Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°</option>
-                    <option ${w.status==='Ù…ÙƒØªÙ…Ù„'?'selected':''}>Ù…ÙƒØªÙ…Ù„</option>
+                    <option ${w.status==='جديد'?'selected':''}>جديد</option>
+                    <option ${w.status==='قيد التنفيذ'?'selected':''}>قيد التنفيذ</option>
+                    <option ${w.status==='مكتمل'?'selected':''}>مكتمل</option>
                 </select>
             </td>
         </tr>
     `});
-    elContent.innerHTML = createTable(['Ø§Ù„Ø¹Ù†ÙˆØ§Ù†', 'Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©', 'Ø§Ù„Ù…Ø³Ù†Ø¯ Ø¥Ù„ÙŠÙ‡', 'Ø§Ù„Ø£ÙˆÙ„ÙˆÙŠØ©', 'Ø§Ù„Ø­Ø§Ù„Ø© (Ù‚Ø§Ø¨Ù„ Ù„Ù„ØªØ¹Ø¯ÙŠÙ„)'], rows, 'openAddWO()', 'Ø£Ù…Ø± Ø¹Ù…Ù„ Ø¬Ø¯ÙŠØ¯');
+    elContent.innerHTML = createTable(['العنوان', 'الماكينة', 'المسند إليه', 'الأولوية', 'الحالة (قابل للتعديل)'], rows, 'openAddWO()', 'أمر عمل جديد');
 };
 
 // Breakdowns
 window.openAddBreakdown = () => {
     const as = Object.entries(dbData.assets).map(([id, a]) => `<option value="${id}">${a.name}</option>`).join('');
-    openModal("Ø¥Ø¶Ø§ÙØ© Ø¨Ù„Ø§Øº Ø¹Ø·Ù„", `
+    openModal("إضافة بلاغ عطل", `
         <div class="space-y-4">
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø© <span class="text-danger">*</span></label><select id="b-asset" class="w-full border border-border p-2.5 rounded-lg"><option value="">-- Ø§Ø®ØªØ± --</option>${as}</select></div>
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„ÙˆØµÙ</label><textarea id="b-desc" class="w-full border border-border p-2.5 rounded-lg h-24"></textarea></div>
+            <div><label class="block text-sm font-bold mb-2">الماكينة <span class="text-danger">*</span></label><select id="b-asset" class="w-full border border-border p-2.5 rounded-lg"><option value="">-- اختر --</option>${as}</select></div>
+            <div><label class="block text-sm font-bold mb-2">الوصف</label><textarea id="b-desc" class="w-full border border-border p-2.5 rounded-lg h-24"></textarea></div>
         </div>
     `, async () => {
         const aId = document.getElementById('b-asset').value;
-        if (!aId) throw new Error('Ø§Ù„Ø±Ø¬Ø§Ø¡ Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©');
-        await push(ref(db, 'breakdowns'), { assetId: aId, desc: document.getElementById('b-desc').value, status: 'Ù†Ø´Ø·', date: Date.now() });
-        showToast('ØªÙ… Ø§Ù„Ø¥Ø¨Ù„Ø§Øº Ø¨Ù†Ø¬Ø§Ø­'); return true;
+        if (!aId) throw new Error('الرجاء اختيار الماكينة');
+        await push(ref(db, 'breakdowns'), { assetId: aId, desc: document.getElementById('b-desc').value, status: 'نشط', date: Date.now() });
+        showToast('تم الإبلاغ بنجاح'); return true;
     });
 };
 const renderBreakdowns = () => {
@@ -432,25 +434,25 @@ const renderBreakdowns = () => {
             <td class="p-4 text-xs text-secondary" dir="ltr">${new Date(b.date).toLocaleString('en-GB')}</td>
         </tr>
     `});
-    elContent.innerHTML = createTable(['Ø§Ù„Ù…Ø§ÙƒÙŠÙ†Ø©', 'Ø§Ù„ÙˆØµÙ', 'Ø§Ù„Ø­Ø§Ù„Ø©', 'Ø§Ù„ØªØ§Ø±ÙŠØ®'], rows, 'openAddBreakdown()', 'Ø¨Ù„Ø§Øº Ø¬Ø¯ÙŠØ¯');
+    elContent.innerHTML = createTable(['الماكينة', 'الوصف', 'الحالة', 'التاريخ'], rows, 'openAddBreakdown()', 'بلاغ جديد');
 };
 
 // Inventory
 window.openAddPart = () => {
-    openModal("Ø¥Ø¶Ø§ÙØ© Ù‚Ø·Ø¹Ø© ØºÙŠØ§Ø±", `
+    openModal("إضافة قطعة غيار", `
         <div class="space-y-4">
-            <div><label class="block text-sm font-bold mb-2">Ø§Ø³Ù… Ø§Ù„Ù‚Ø·Ø¹Ø© <span class="text-danger">*</span></label><input id="p-name" type="text" class="w-full border border-border p-2.5 rounded-lg"></div>
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø±Ù‚Ù… Ø§Ù„ØªØ¹Ø±ÙŠÙÙŠ</label><input id="p-code" type="text" class="w-full border border-border p-2.5 rounded-lg" dir="ltr"></div>
+            <div><label class="block text-sm font-bold mb-2">اسم القطعة <span class="text-danger">*</span></label><input id="p-name" type="text" class="w-full border border-border p-2.5 rounded-lg"></div>
+            <div><label class="block text-sm font-bold mb-2">الرقم التعريفي</label><input id="p-code" type="text" class="w-full border border-border p-2.5 rounded-lg" dir="ltr"></div>
             <div class="flex gap-4">
-                <div class="w-1/2"><label class="block text-sm font-bold mb-2">Ø§Ù„ÙƒÙ…ÙŠØ© Ø§Ù„Ø­Ø§Ù„ÙŠØ©</label><input id="p-qty" type="number" class="w-full border border-border p-2.5 rounded-lg" value="0"></div>
-                <div class="w-1/2"><label class="block text-sm font-bold mb-2">Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ø¯Ù†Ù‰</label><input id="p-min" type="number" class="w-full border border-border p-2.5 rounded-lg" value="5"></div>
+                <div class="w-1/2"><label class="block text-sm font-bold mb-2">الكمية الحالية</label><input id="p-qty" type="number" class="w-full border border-border p-2.5 rounded-lg" value="0"></div>
+                <div class="w-1/2"><label class="block text-sm font-bold mb-2">الحد الأدنى</label><input id="p-min" type="number" class="w-full border border-border p-2.5 rounded-lg" value="5"></div>
             </div>
         </div>
     `, async () => {
         const name = document.getElementById('p-name').value;
-        if (!name) throw new Error('Ø§Ù„Ø§Ø³Ù… Ù…Ø·Ù„ÙˆØ¨');
+        if (!name) throw new Error('الاسم مطلوب');
         await push(ref(db, 'spareParts'), { name, code: document.getElementById('p-code').value, qty: Number(document.getElementById('p-qty').value), min: Number(document.getElementById('p-min').value) });
-        showToast('ØªÙ… Ø§Ù„Ø­ÙØ¸'); return true;
+        showToast('تم الحفظ'); return true;
     });
 };
 const renderInventory = () => {
@@ -460,41 +462,41 @@ const renderInventory = () => {
             <td class="p-4 text-xs" dir="ltr">${p.code||'-'}</td>
             <td class="p-4"><span class="font-bold text-lg ${p.qty <= p.min ? 'text-danger' : 'text-primary'}">${p.qty}</span></td>
             <td class="p-4"><span class="text-secondary text-xs font-bold">${p.min}</span></td>
-            <td class="p-4">${p.qty <= p.min ? '<span class="px-2 py-1 bg-red-100 text-danger rounded text-xs font-bold">Ù†Ù‚Øµ</span>' : '<span class="px-2 py-1 bg-green-100 text-success rounded text-xs font-bold">Ù…ØªÙˆÙØ±</span>'}</td>
+            <td class="p-4">${p.qty <= p.min ? '<span class="px-2 py-1 bg-red-100 text-danger rounded text-xs font-bold">نقص</span>' : '<span class="px-2 py-1 bg-green-100 text-success rounded text-xs font-bold">متوفر</span>'}</td>
         </tr>
     `);
-    elContent.innerHTML = createTable(['Ø§Ù„Ù‚Ø·Ø¹Ø©', 'Ø§Ù„Ø±Ù‚Ù…', 'Ø§Ù„ÙƒÙ…ÙŠØ©', 'Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ø¯Ù†Ù‰', 'Ø§Ù„Ø­Ø§Ù„Ø©'], rows, 'openAddPart()', 'Ø¥Ø¶Ø§ÙØ© Ù‚Ø·Ø¹Ø©');
+    elContent.innerHTML = createTable(['القطعة', 'الرقم', 'الكمية', 'الحد الأدنى', 'الحالة'], rows, 'openAddPart()', 'إضافة قطعة');
 };
 
 // Employees
 window.openAddEmployee = () => {
-    openModal("Ø¥Ø¶Ø§ÙØ© Ù…ÙˆØ¸Ù", `
+    openModal("إضافة موظف", `
         <div class="space-y-4">
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ (Ø£Ø³Ø§Ø³ÙŠ Ù„ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„) <span class="text-danger">*</span></label><input id="u-email" type="email" class="w-full border border-border p-2.5 rounded-lg" dir="ltr"></div>
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø§Ø³Ù… Ø§Ù„ÙƒØ§Ù…Ù„</label><input id="u-name" type="text" class="w-full border border-border p-2.5 rounded-lg"></div>
-            <div><label class="block text-sm font-bold mb-2">Ø§Ù„Ø¯ÙˆØ± / Ø§Ù„ØµÙ„Ø§Ø­ÙŠØ©</label><select id="u-role" class="w-full border border-border p-2.5 rounded-lg"><option value="technician">ÙÙ†ÙŠ ØµÙŠØ§Ù†Ø©</option><option value="admin">Ø¥Ø¯Ø§Ø±ÙŠ</option></select></div>
+            <div><label class="block text-sm font-bold mb-2">البريد الإلكتروني (أساسي لتسجيل الدخول) <span class="text-danger">*</span></label><input id="u-email" type="email" class="w-full border border-border p-2.5 rounded-lg" dir="ltr"></div>
+            <div><label class="block text-sm font-bold mb-2">الاسم الكامل</label><input id="u-name" type="text" class="w-full border border-border p-2.5 rounded-lg"></div>
+            <div><label class="block text-sm font-bold mb-2">الدور / الصلاحية</label><select id="u-role" class="w-full border border-border p-2.5 rounded-lg"><option value="technician">فني صيانة</option><option value="admin">إداري</option></select></div>
         </div>
         <div class="mt-4 p-3 bg-blue-50 text-action text-xs font-bold rounded-lg leading-relaxed">
-            Ù…Ù„Ø§Ø­Ø¸Ø©: Ù„ØªÙ…ÙƒÙŠÙ† Ø§Ù„Ù…ÙˆØ¸Ù Ù…Ù† Ø§Ù„Ø¯Ø®ÙˆÙ„ØŒ ÙŠØ¬Ø¨ Ø¹Ù„ÙŠÙ‡ Ø§Ø³ØªØ®Ø¯Ø§Ù… "ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„ Ø¹Ø¨Ø± Google" Ø¨Ù†ÙØ³ Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ Ø§Ù„Ù…Ø¯Ø®Ù„ Ù‡Ù†Ø§ØŒ Ø£Ùˆ Ø£Ù† ØªÙ‚ÙˆÙ… Ø¨Ø¥Ù†Ø´Ø§Ø¡ Ø­Ø³Ø§Ø¨ Ù„Ù‡ ÙŠØ¯ÙˆÙŠØ§Ù‹ Ù…Ù† Firebase Auth.
+            ملاحظة: لتمكين الموظف من الدخول، يجب عليه استخدام "تسجيل الدخول عبر Google" بنفس البريد الإلكتروني المدخل هنا، أو أن تقوم بإنشاء حساب له يدوياً من Firebase Auth.
         </div>
     `, async () => {
         const email = document.getElementById('u-email').value;
-        if (!email) throw new Error('Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ Ù…Ø·Ù„ÙˆØ¨');
+        if (!email) throw new Error('البريد الإلكتروني مطلوب');
         // We push to users collection with a random ID, but ideally we match UID. This is just for demonstration.
         await push(ref(db, 'users'), { email, name: document.getElementById('u-name').value, role: document.getElementById('u-role').value, status: 'active' });
-        showToast('ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ©'); return true;
+        showToast('تمت الإضافة'); return true;
     });
 };
 const renderEmployees = () => {
     const rows = Object.values(dbData.users).map(u => `
         <tr class="hover:bg-gray-50 transition">
-            <td class="p-4 font-bold text-primary">${u.name||'Ù…Ø³ØªØ®Ø¯Ù…'}</td>
+            <td class="p-4 font-bold text-primary">${u.name||'مستخدم'}</td>
             <td class="p-4 text-xs font-bold text-secondary" dir="ltr">${u.email}</td>
             <td class="p-4"><span class="px-2 py-1 bg-gray-100 border border-border rounded text-xs font-bold text-primary">${u.role}</span></td>
-            <td class="p-4">${u.status==='active'?'<span class="text-success font-bold text-xs">Ù†Ø´Ø·</span>':'<span class="text-danger font-bold text-xs">Ù…Ø¹Ø·Ù„</span>'}</td>
+            <td class="p-4">${u.status==='active'?'<span class="text-success font-bold text-xs">نشط</span>':'<span class="text-danger font-bold text-xs">معطل</span>'}</td>
         </tr>
     `);
-    elContent.innerHTML = createTable(['Ø§Ù„Ø§Ø³Ù…', 'Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ', 'Ø§Ù„Ø¯ÙˆØ±', 'Ø§Ù„Ø­Ø§Ù„Ø©'], rows, 'openAddEmployee()', 'Ø¥Ø¶Ø§ÙØ© Ù…ÙˆØ¸Ù');
+    elContent.innerHTML = createTable(['الاسم', 'البريد الإلكتروني', 'الدور', 'الحالة'], rows, 'openAddEmployee()', 'إضافة موظف');
 };
 
 // Audit Log
@@ -506,10 +508,9 @@ const renderAudit = () => {
             <td class="p-4 text-xs font-bold text-secondary">${a.user||'-'}</td>
         </tr>
     `);
-    elContent.innerHTML = createTable(['Ø§Ù„ØªØ§Ø±ÙŠØ®', 'Ø§Ù„Ø­Ø¯Ø«', 'Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…'], rows, null, null);
+    elContent.innerHTML = createTable(['التاريخ', 'الحدث', 'المستخدم'], rows, null, null);
 };
 
 </script>
 </body>
 </html>
-
